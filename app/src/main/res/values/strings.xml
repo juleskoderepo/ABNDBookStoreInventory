@@ -1,12 +1,14 @@
-<resources>
-    <string name="app_name">ABND Book Store Inventory</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Book Store Inventory</string>
     <string name="action_settings">Settings</string>
     <string name="action_insert_dummy_data">Insert Dummy Data</string>
 
     <!-- Dummy data values -->
-    <string name="dummy_name">Intro to Android Programming</string>
-    <string name="dummy_price">1995</string>
-    <string name="dummy_quantity">5</string>
+    <string name="dummy_name">Travel Guide</string>
     <string name="dummy_supplier_name">Acme Publishing</string>
-    <string name="dummy_supplier_phone">555-555-5555</string>
+    <string name="dummy_supplier_phone">(555)555-5555</string>
+
+    <string name="products_table_contains">The products table contains %1$d %2$s</string>
+    <string name="product">product.\n\n</string>
+    <string name="products">products.\n\n</string>
 </resources>
