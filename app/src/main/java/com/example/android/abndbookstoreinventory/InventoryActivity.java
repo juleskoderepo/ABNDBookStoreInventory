@@ -94,6 +94,8 @@ public class InventoryActivity extends AppCompatActivity {
         // Create a map of values with column names as keys
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, getString(R.string.dummy_name));
+        values.put(ProductEntry.COLUMN_PRODUCT_DESCRIPTION,"Guide book for visitors");
+        values.put(ProductEntry.COLUMN_PRODUCT_CATEGORY,ProductEntry.CATEGORY_BOOK);
         values.put(ProductEntry.COLUMN_PRICE, getResources().getInteger(R.integer.dummy_price));
         values.put(ProductEntry.COLUMN_QUANTITY_IN_STOCK, getResources().getInteger(R.integer.dummy_quantity_in_stock));
         values.put(ProductEntry.COLUMN_QUANTITY_ON_ORDER, getResources().getInteger(R.integer.dummy_quantity_on_order));
