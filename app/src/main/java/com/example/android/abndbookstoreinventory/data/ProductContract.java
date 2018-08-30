@@ -10,7 +10,7 @@ public final class ProductContract {
     private ProductContract() {}
 
     // Content authority for URI
-    public static final String CONTENT_AUTHORITY = "com.example.android.abndbookstoreinventory.data";
+    public static final String CONTENT_AUTHORITY = "com.example.android.abndbookstoreinventory";
     // Base to use for all Content URIs.
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     // Path to the type of data

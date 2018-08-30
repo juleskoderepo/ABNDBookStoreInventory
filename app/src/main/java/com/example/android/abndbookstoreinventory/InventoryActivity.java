@@ -1,18 +1,22 @@
 package com.example.android.abndbookstoreinventory;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.abndbookstoreinventory.data.ProductDbHelper;
 import com.example.android.abndbookstoreinventory.data.ProductContract.ProductEntry;
@@ -20,6 +24,8 @@ import com.example.android.abndbookstoreinventory.data.ProductContract.ProductEn
 import java.math.BigDecimal;
 
 public class InventoryActivity extends AppCompatActivity {
+
+    private static final String LOG_TAG = InventoryActivity.class.getSimpleName();
 
     ProductDbHelper prodDbHelper;
 
@@ -88,9 +94,6 @@ public class InventoryActivity extends AppCompatActivity {
      * Helper method to insert hardcoded values into db. For debugging purposes.
      */
     private void insertProduct() {
-        // Get database in write mode
-        SQLiteDatabase db = prodDbHelper.getWritableDatabase();
-
         // Create a map of values with column names as keys
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, getString(R.string.dummy_name));
@@ -102,9 +105,17 @@ public class InventoryActivity extends AppCompatActivity {
         values.put(ProductEntry.COLUMN_SUPPLIER_NAME, getString(R.string.dummy_supplier_name));
         values.put(ProductEntry.COLUMN_SUPPLIER_PHONE, getString(R.string.dummy_supplier_phone));
 
-        // Insert the new row. Returns the primary key value of the new row i.e. _id
-        // or -1 if error occurs inserting data
-        db.insert(ProductEntry.TABLE_NAME, null, values);
+        Log.i(LOG_TAG,"Content values: " + values);
+
+        // Call the ContentResolver to insert values into the database table
+        Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI,values);
+        long rowID = ContentUris.parseId(newUri);
+
+        if (newUri == null || rowID == -1){
+            Toast.makeText(this,"Error inserting row",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this,"New row inserted",Toast.LENGTH_LONG).show();
+        }
 
     }
 }
