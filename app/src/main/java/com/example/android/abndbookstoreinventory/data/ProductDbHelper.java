@@ -9,14 +9,15 @@ import static com.example.android.abndbookstoreinventory.data.ProductContract.Pr
 
 public class ProductDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "inventory.db";
 
     private static final String SQL_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_PRODUCT_NAME + " TEXT NOT NULL, " +
             COLUMN_PRICE + " INTEGER NOT NULL DEFAULT 0, " +
-            COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0, " +
+            COLUMN_QUANTITY_IN_STOCK + " INTEGER NOT NULL DEFAULT 0, " +
+            COLUMN_QUANTITY_ON_ORDER + " INTEGER NOT NULL DEFAULT 0, " +
             COLUMN_SUPPLIER_NAME + " TEXT, " +
             COLUMN_SUPPLIER_PHONE + " TEXT " +
             ");";

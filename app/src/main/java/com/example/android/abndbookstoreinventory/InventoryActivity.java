@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.android.abndbookstoreinventory.data.ProductDbHelper;
@@ -75,72 +76,12 @@ public class InventoryActivity extends AppCompatActivity {
 
     // Helper method to read data from the database and display it on screen
     private void displayProductInfo() {
-        // Create and/or open a database to read from
-        SQLiteDatabase db = prodDbHelper.getReadableDatabase();
+        // Find ListView and populate
+        ListView productListView = findViewById(R.id.list_product);
 
-        // Define the db query to get a Cursor that contains all the rows from the products table
-        Cursor productsCursor = db.query(ProductEntry.TABLE_NAME, null, null, null, null, null, null);
-
-        try {
-            int productsCount = productsCursor.getCount();
-            TextView displayView = findViewById(R.id.text_view_inventory);
-            String tableSummary;
-
-            if (productsCount == 1) {
-                tableSummary = String.format(getString(R.string.products_table_contains),
-                        productsCursor.getCount(),
-                        getString(R.string.product));
-                displayView.setText(tableSummary);
-            } else {
-                tableSummary = String.format(getString(R.string.products_table_contains),
-                        productsCursor.getCount(),
-                        getString(R.string.products));
-                displayView.setText(tableSummary);
-            }
-
-            displayView.append(ProductEntry.COLUMN_ID + " - " +
-                    ProductEntry.COLUMN_PRODUCT_NAME + " - " +
-                    ProductEntry.COLUMN_PRICE + " - " +
-                    ProductEntry.COLUMN_QUANTITY + " - " +
-                    ProductEntry.COLUMN_SUPPLIER_NAME + " - " +
-                    ProductEntry.COLUMN_SUPPLIER_PHONE + "\n\n");
-
-            // Get the index position for each column in the table
-            int idColIndex = productsCursor.getColumnIndex(ProductEntry.COLUMN_ID);
-            int prodNameColIndex = productsCursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
-            int priceColIndex = productsCursor.getColumnIndex(ProductEntry.COLUMN_PRICE);
-            int quantityColIndex = productsCursor.getColumnIndex(ProductEntry.COLUMN_QUANTITY);
-            int supplierNameColIndex = productsCursor.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_NAME);
-            int supplierPhoneColIndex = productsCursor.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_PHONE);
-
-            // Iterate through the rows in the cursor, return columns values, and display
-            // values on screen
-
-            while (productsCursor.moveToNext()) {
-                int currentId = productsCursor.getInt(idColIndex);
-                String currentProduct = productsCursor.getString(prodNameColIndex);
-                int currentPrice = productsCursor.getInt(priceColIndex);
-                int currentQuantity = productsCursor.getInt(quantityColIndex);
-                String currentSupplier = productsCursor.getString(supplierNameColIndex);
-                String currentSupplierPhone = productsCursor.getString(supplierPhoneColIndex);
-
-                // Convert integer price value to currency value
-                BigDecimal formattedPrice = BigDecimal.valueOf(currentPrice);
-                formattedPrice = formattedPrice.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_HALF_UP);
-
-                displayView.append(currentId + " - " +
-                        currentProduct + " - " +
-                        formattedPrice + " - " +
-                        currentQuantity + " - " +
-                        currentSupplier + " - " +
-                        currentSupplierPhone + "\n");
-            }
-
-        } finally {
-            // Release the cursor resources and invalidate it
-            productsCursor.close();
-        }
-
+        // Find and set the empty view on the list view when there are no items in the list
+        View emptyView = findViewById(R.id.empty_view);
+        productListView.setEmptyView(emptyView);
     }
 
     /**
@@ -154,7 +95,8 @@ public class InventoryActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, getString(R.string.dummy_name));
         values.put(ProductEntry.COLUMN_PRICE, getResources().getInteger(R.integer.dummy_price));
-        values.put(ProductEntry.COLUMN_QUANTITY, getResources().getInteger(R.integer.dummy_quantity));
+        values.put(ProductEntry.COLUMN_QUANTITY_IN_STOCK, getResources().getInteger(R.integer.dummy_quantity_in_stock));
+        values.put(ProductEntry.COLUMN_QUANTITY_ON_ORDER, getResources().getInteger(R.integer.dummy_quantity_on_order));
         values.put(ProductEntry.COLUMN_SUPPLIER_NAME, getString(R.string.dummy_supplier_name));
         values.put(ProductEntry.COLUMN_SUPPLIER_PHONE, getString(R.string.dummy_supplier_phone));
 

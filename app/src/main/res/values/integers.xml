@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="dummy_price">1995</integer>
-    <integer name="dummy_quantity">5</integer>
+    <integer name="dummy_quantity_in_stock">5</integer>
+    <integer name="dummy_quantity_on_order">0</integer>
 </resources>
