@@ -20,8 +20,8 @@ public class ProductDbHelper extends SQLiteOpenHelper {
             COLUMN_PRICE + " INTEGER NOT NULL DEFAULT 0, " +
             COLUMN_QUANTITY_IN_STOCK + " INTEGER NOT NULL DEFAULT 0, " +
             COLUMN_QUANTITY_ON_ORDER + " INTEGER NOT NULL DEFAULT 0, " +
-            COLUMN_SUPPLIER_NAME + " TEXT, " +
-            COLUMN_SUPPLIER_PHONE + " TEXT " +
+            COLUMN_SUPPLIER_NAME + " TEXT NOT NULL, " +
+            COLUMN_SUPPLIER_PHONE + " TEXT NOT NULL " +
             ");";
 
     private static final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;

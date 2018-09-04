@@ -25,6 +25,7 @@ public class ProductProvider extends ContentProvider {
     // exception string constants
     private static final String QUERY_EXCEPTION = "Cannot query unknown URI";
     private static final String INSERT_NOT_SUPPORTED_EXCEPTION = "Insert not supported for URI ";
+    private static final String DELETE_EXCEPTION = "Deletion not supported for URI: ";
 
     // Create the UriMatcher
     private static final UriMatcher productUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -155,12 +156,37 @@ public class ProductProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
+    public int delete(@NonNull Uri uri, @Nullable String selection,
+                      @Nullable String[] selectionArgs) {
+        // Get writable db
+        SQLiteDatabase db = prodDbHelper.getWritableDatabase();
+        // number of rows deleted
+        int rowsDeleted;
+
+        final int match = productUriMatcher.match(uri);
+        switch(match){
+            case PRODUCTS:
+                // Perform delete of all records
+                rowsDeleted = db.delete(ProductContract.ProductEntry.TABLE_NAME,
+                        selection, selectionArgs);
+                break;
+            case PRODUCT_ID:
+                // Specify product to delete given the ID from the URI
+                selection = ProductContract.ProductEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                // Perform delete of specified product
+                rowsDeleted = db.delete(ProductContract.ProductEntry.TABLE_NAME,
+                        selection,selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException(DELETE_EXCEPTION + uri);
+        }
 
         // Notify listeners that the data has changed for the product content URI
         // if a row is deleted
         getContext().getContentResolver().notifyChange(uri,null);
-        return 0;
+
+        return rowsDeleted;
     }
 
     @Override

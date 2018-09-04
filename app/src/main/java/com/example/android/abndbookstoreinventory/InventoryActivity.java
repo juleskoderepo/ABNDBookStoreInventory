@@ -1,9 +1,11 @@
 package com.example.android.abndbookstoreinventory;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -89,10 +91,13 @@ public class InventoryActivity extends AppCompatActivity
         int id = item.getItemId();
 
         switch (id) {
+            // Respond to click on 'Insert Dummy Data' menu option
             case R.id.action_insert_dummy_data:
                 insertProduct();
                 return true;
-            case R.id.action_settings:
+            // Respond to click on 'Delete All Inventory' menu option
+            case R.id.action_delete_all:
+                showDeleteConfirmationDialog();
                 return true;
         }
 
@@ -160,5 +165,44 @@ public class InventoryActivity extends AppCompatActivity
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         // Clear out the adapter's reference to the cursor to prevent memory leaks
         cursorAdapter.swapCursor(null);
+    }
+
+    private void showDeleteConfirmationDialog(){
+        // Create an AlertDialog.Builder and set the message, and set click listeners
+        // for the positive and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.delete_all_dialog_msg));
+        builder.setPositiveButton(getString(R.string.delete_confirm), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // delete inventory
+                deleteInventory();
+            }
+        });
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // User clicked 'Cancel' so go back to activity
+                if(dialogInterface != null){
+                    dialogInterface.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+    }
+
+    /**
+     * Perform delete of all records from db table
+     */
+    private void deleteInventory(){
+        int rowsDeleted = getContentResolver().delete(ProductEntry.CONTENT_URI,
+                String.valueOf(1),null);
+        Toast.makeText(this,getString(R.string.rows_deleted) + rowsDeleted,
+                Toast.LENGTH_LONG).show();
+
     }
 }
