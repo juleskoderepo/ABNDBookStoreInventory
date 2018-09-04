@@ -1,11 +1,16 @@
 package com.example.android.abndbookstoreinventory;
 
+import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,9 +28,11 @@ import com.example.android.abndbookstoreinventory.data.ProductContract.ProductEn
 
 import java.math.BigDecimal;
 
-public class InventoryActivity extends AppCompatActivity {
+public class InventoryActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = InventoryActivity.class.getSimpleName();
+    private static final int PROD_LOADER_ID = 900;
 
     ProductDbHelper prodDbHelper;
     ProductCursorAdapter cursorAdapter;
@@ -49,8 +56,21 @@ public class InventoryActivity extends AppCompatActivity {
         // Database helper to get access to the database
         prodDbHelper = new ProductDbHelper(this);
 
-        // Display current db info
-        displayProductInfo();
+        // Find ListView and populate
+        ListView productListView = findViewById(R.id.list_product);
+
+        // Find and set the empty view on the list view when there are no items in the list
+        View emptyView = findViewById(R.id.empty_view);
+        productListView.setEmptyView(emptyView);
+
+        // Set up cursor adapter using cursor
+        cursorAdapter = new ProductCursorAdapter(this, null, 0);
+        // Attach cursor adapter to ListView
+        productListView.setAdapter(cursorAdapter);
+
+        // Initialize the CursorLoader
+        getLoaderManager().initLoader(PROD_LOADER_ID, null, this);
+
     }
 
 
@@ -71,43 +91,12 @@ public class InventoryActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_insert_dummy_data:
                 insertProduct();
-                displayProductInfo();
-
                 return true;
             case R.id.action_settings:
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    // Helper method to read data from the database and display it on screen
-    private void displayProductInfo() {
-        // Define a projection as it is inefficient to return all columns by passing in null
-        String[] projection = {
-                ProductEntry._ID,
-                ProductEntry.COLUMN_PRODUCT_NAME,
-                ProductEntry.COLUMN_PRICE,
-                ProductEntry.COLUMN_QUANTITY_IN_STOCK
-        };
-
-        Cursor cursor = getContentResolver().query(ProductEntry.CONTENT_URI,
-                projection,
-                null,
-                null,
-                null);
-
-        // Find ListView and populate
-        ListView productListView = findViewById(R.id.list_product);
-
-        // Find and set the empty view on the list view when there are no items in the list
-        View emptyView = findViewById(R.id.empty_view);
-        productListView.setEmptyView(emptyView);
-
-        // Set up cursor adapter using cursor
-        cursorAdapter = new ProductCursorAdapter(this, cursor, 0);
-        // Attach cursor adapter to ListView
-        productListView.setAdapter(cursorAdapter);
     }
 
     /**
@@ -117,25 +106,59 @@ public class InventoryActivity extends AppCompatActivity {
         // Create a map of values with column names as keys
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, getString(R.string.dummy_name));
-        values.put(ProductEntry.COLUMN_PRODUCT_DESCRIPTION,"Guide book for visitors");
-        values.put(ProductEntry.COLUMN_PRODUCT_CATEGORY,ProductEntry.CATEGORY_BOOK);
+        values.put(ProductEntry.COLUMN_PRODUCT_DESCRIPTION, "Guide book for visitors");
+        values.put(ProductEntry.COLUMN_PRODUCT_CATEGORY, ProductEntry.CATEGORY_BOOK);
         values.put(ProductEntry.COLUMN_PRICE, getResources().getInteger(R.integer.dummy_price));
         values.put(ProductEntry.COLUMN_QUANTITY_IN_STOCK, getResources().getInteger(R.integer.dummy_quantity_in_stock));
         values.put(ProductEntry.COLUMN_QUANTITY_ON_ORDER, getResources().getInteger(R.integer.dummy_quantity_on_order));
         values.put(ProductEntry.COLUMN_SUPPLIER_NAME, getString(R.string.dummy_supplier_name));
         values.put(ProductEntry.COLUMN_SUPPLIER_PHONE, getString(R.string.dummy_supplier_phone));
 
-        Log.i(LOG_TAG,"Content values: " + values);
+        Log.i(LOG_TAG, "Content values: " + values);
 
         // Call the ContentResolver to insert values into the database table
-        Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI,values);
+        Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
         long rowID = ContentUris.parseId(newUri);
 
-        if (newUri == null || rowID == -1){
-            Toast.makeText(this,"Error inserting row",Toast.LENGTH_LONG).show();
+        if (newUri == null || rowID == -1) {
+            Toast.makeText(this, "Error inserting row", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this,"New row inserted",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "New row inserted", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int loader_id, @Nullable Bundle bundle) {
+        // Declare and assign values for parameters needed for CursorLoader
+        String[] projection = {
+                ProductEntry._ID,
+                ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductEntry.COLUMN_PRICE,
+                ProductEntry.COLUMN_QUANTITY_IN_STOCK
+        };
+
+        // Return CursorLoader that executes the content provider's query method on a
+        // background thread
+        return new CursorLoader(this,
+                ProductEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        // Moves the query results into the adapter, causing ListView fronting the adapter
+        // to re-display
+        cursorAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        // Clear out the adapter's reference to the cursor to prevent memory leaks
+        cursorAdapter.swapCursor(null);
     }
 }

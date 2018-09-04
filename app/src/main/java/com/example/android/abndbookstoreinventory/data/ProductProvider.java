@@ -77,6 +77,12 @@ public class ProductProvider extends ContentProvider {
                 throw new IllegalArgumentException(QUERY_EXCEPTION + uri);
         }
 
+        // Set notification URI on the cursor, so we know what content URI
+        // the cursor was created for. If the data at this URI changes, then we need
+        // to update the Cursor.
+        cursor.setNotificationUri(getContext().getContentResolver(),uri);
+
+        // Return the cursor
         return cursor;
     }
 
@@ -141,7 +147,8 @@ public class ProductProvider extends ContentProvider {
             Log.e(LOG_TAG,"Failed to insert row for URI: " + uri);
         }
 
-        // TODO: Add change listener
+        // Notify listeners that the data has changed for the product content URI
+        getContext().getContentResolver().notifyChange(uri,null);
 
         // return the new URI with the ID assigned to the new row
         return ContentUris.withAppendedId(uri,newRowId);
@@ -149,11 +156,20 @@ public class ProductProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
+
+        // Notify listeners that the data has changed for the product content URI
+        // if a row is deleted
+        getContext().getContentResolver().notifyChange(uri,null);
         return 0;
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+
+        // Notify listeners that the data has changed for the product content URI
+        // if a row is updated
+        getContext().getContentResolver().notifyChange(uri,null);
+
         return 0;
     }
 }
