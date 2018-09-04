@@ -28,6 +28,7 @@ public class InventoryActivity extends AppCompatActivity {
     private static final String LOG_TAG = InventoryActivity.class.getSimpleName();
 
     ProductDbHelper prodDbHelper;
+    ProductCursorAdapter cursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +83,31 @@ public class InventoryActivity extends AppCompatActivity {
 
     // Helper method to read data from the database and display it on screen
     private void displayProductInfo() {
+        // Define a projection as it is inefficient to return all columns by passing in null
+        String[] projection = {
+                ProductEntry._ID,
+                ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductEntry.COLUMN_PRICE,
+                ProductEntry.COLUMN_QUANTITY_IN_STOCK
+        };
+
+        Cursor cursor = getContentResolver().query(ProductEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
+
         // Find ListView and populate
         ListView productListView = findViewById(R.id.list_product);
 
         // Find and set the empty view on the list view when there are no items in the list
         View emptyView = findViewById(R.id.empty_view);
         productListView.setEmptyView(emptyView);
+
+        // Set up cursor adapter using cursor
+        cursorAdapter = new ProductCursorAdapter(this, cursor, 0);
+        // Attach cursor adapter to ListView
+        productListView.setAdapter(cursorAdapter);
     }
 
     /**
