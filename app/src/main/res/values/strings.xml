@@ -21,4 +21,6 @@
     <string name="delete_confirm">Delete</string>;
     <string name="cancel">Cancel</string>;
 
+    <string name="button_sale">Sale</string>;
+
 </resources>

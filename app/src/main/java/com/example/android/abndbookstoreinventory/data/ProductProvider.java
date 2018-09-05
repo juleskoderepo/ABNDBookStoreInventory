@@ -26,6 +26,7 @@ public class ProductProvider extends ContentProvider {
     private static final String QUERY_EXCEPTION = "Cannot query unknown URI";
     private static final String INSERT_NOT_SUPPORTED_EXCEPTION = "Insert not supported for URI ";
     private static final String DELETE_EXCEPTION = "Deletion not supported for URI: ";
+    private static final String UPDATE_EXCEPTION = "Update not supported for URI: ";
 
     // Create the UriMatcher
     private static final UriMatcher productUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -190,12 +191,46 @@ public class ProductProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues,
+                      @Nullable String selection, @Nullable String[] selectionArgs) {
 
-        // Notify listeners that the data has changed for the product content URI
-        // if a row is updated
-        getContext().getContentResolver().notifyChange(uri,null);
+        final int match = productUriMatcher.match(uri);
+        switch(match){
+            case PRODUCTS:
+                return updateProduct(uri,contentValues,selection,selectionArgs);
+            case PRODUCT_ID:
+                selection = ProductContract.ProductEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
-        return 0;
+                return updateProduct(uri,contentValues,selection,selectionArgs);
+            default:
+                throw new IllegalArgumentException(UPDATE_EXCEPTION + uri);
+        }
+    }
+
+    private int updateProduct(Uri uri, ContentValues contentValues, String selection,
+                              String[] selectionArgs){
+
+        if(contentValues.size() == 0){
+            return 0;
+        }
+
+        //TODO: Add validation
+
+        // Get writable db
+        SQLiteDatabase db = prodDbHelper.getWritableDatabase();
+        // Perform update
+        int rowsUpdated = db.update(ProductContract.ProductEntry.TABLE_NAME, contentValues,
+                selection, selectionArgs);
+
+        if(rowsUpdated != 0){
+            // Notify listeners that the data has changed for the product content URI
+            // if a row is updated
+            getContext().getContentResolver().notifyChange(uri,null);
+        }
+
+        // Return number of rows updated
+        return rowsUpdated;
+
     }
 }

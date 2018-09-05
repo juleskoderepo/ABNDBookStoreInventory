@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,6 +70,16 @@ public class InventoryActivity extends AppCompatActivity
         cursorAdapter = new ProductCursorAdapter(this, null, 0);
         // Attach cursor adapter to ListView
         productListView.setAdapter(cursorAdapter);
+
+        // Decrement the quantity associated with the product item
+        productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position,
+                                    long id) {
+
+
+            }
+        });
 
         // Initialize the CursorLoader
         getLoaderManager().initLoader(PROD_LOADER_ID, null, this);

@@ -1,45 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/product_name"
+    <LinearLayout
+        android:id="@+id/product_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/layout_margin_vertical"
+            android:layout_marginLeft="@dimen/layout_margin_default"
+            android:layout_marginRight="@dimen/layout_margin_default"
+            android:layout_marginTop="@dimen/layout_margin_vertical"
+            android:fontFamily="san-serif-medium"
+            android:textAppearance="?android:textAppearanceMedium"
+            tools:text="War and Peace" />
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/layout_margin_vertical"
+            android:layout_marginLeft="@dimen/layout_margin_default"
+            android:layout_marginRight="@dimen/layout_margin_default"
+            android:fontFamily="san-serif"
+            android:textAppearance="?android:textAppearanceSmall"
+            tools:text="$9.99" />
+
+        <TextView
+            android:id="@+id/quantity_in_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/layout_margin_vertical"
+            android:layout_marginLeft="@dimen/layout_margin_default"
+            android:layout_marginRight="@dimen/layout_margin_default"
+            android:fontFamily="san-serif"
+            android:textAppearance="?android:textAppearanceSmall"
+            tools:text="2" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/sale_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/layout_margin_default"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/layout_margin_default"
         android:layout_marginRight="@dimen/layout_margin_default"
-        android:layout_marginTop="@dimen/layout_margin_vertical"
-        android:layout_marginBottom="@dimen/layout_margin_vertical"
-        android:fontFamily="san-serif-medium"
-        android:textAppearance="?android:textAppearanceMedium"
-        tools:text="War and Peace"
-        />
+        android:text="@string/button_sale"
+        tools:text="@string/button_sale"/>
 
-    <TextView
-        android:id="@+id/price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/layout_margin_default"
-        android:layout_marginRight="@dimen/layout_margin_default"
-        android:layout_marginBottom="@dimen/layout_margin_vertical"
-        android:fontFamily="san-serif"
-        android:textAppearance="?android:textAppearanceSmall"
-        tools:text="$9.99"
-        />
-
-    <TextView
-        android:id="@+id/quantity_in_stock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/layout_margin_default"
-        android:layout_marginRight="@dimen/layout_margin_default"
-        android:layout_marginBottom="@dimen/layout_margin_vertical"
-        android:fontFamily="san-serif"
-        android:textAppearance="?android:textAppearanceSmall"
-        tools:text="2"
-        />
-
-</LinearLayout>
+</RelativeLayout>
