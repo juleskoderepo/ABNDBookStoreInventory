@@ -21,6 +21,19 @@
     <string name="delete_confirm">Delete</string>;
     <string name="cancel">Cancel</string>;
 
-    <string name="button_sale">Sale</string>;
+    <string name="button_sale">Sale</string>
+    <string name="title_activity_detail">Product Details</string>;
+
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+
+    <string name="product_name">Name</string>
+    <string name="price">Price</string>
+    <string name="category">Category</string>
+    <string name="quantity_in_stock">Quantity In Stock</string>
+    <string name="quantity_on_order">Quantity On Order</string>
+    <string name="supplier_name">Supplier Name</string>
+    <string name="supplier_phone">Supplier Phone Number</string>
+
 
 </resources>
