@@ -36,6 +36,22 @@
         app:layout_constraintTop_toBottomOf="@+id/detail_name" />
 
     <EditText
+        android:id="@+id/detail_prod_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Product Description"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_category_spinner" />
+
+    <EditText
         android:id="@+id/detail_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -50,7 +66,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_category_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/detail_prod_description" />
 
     <EditText
         android:id="@+id/detail_quant_in_stock"
@@ -104,7 +120,7 @@
         app:layout_constraintTop_toBottomOf="@+id/detail_quant_on_order" />
 
     <EditText
-        android:id="@+id/detailj_supplier_phone"
+        android:id="@+id/detail_supplier_phone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

@@ -1,33 +1,116 @@
 package com.example.android.abndbookstoreinventory;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 
-public class DetailActivity extends AppCompatActivity {
+import com.example.android.abndbookstoreinventory.data.ProductContract.ProductEntry;
+
+public class DetailActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private Uri currentProductUri;
+
+    private EditText nameET;
+    private Spinner categorySpinner;
+    private EditText productDescriptionET;
+    private EditText priceET;
+    private EditText quantityInStockET;
+    private EditText quantityOnOrderET;
+    private EditText supplierNameET;
+    private EditText supplierPhoneET;
+
+    private int category = ProductEntry.CATEGORY_UNKNOWN;
+
+    private static final int DETAIL_LOADER_ID = 901;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        // Use getIntent and getData to get the associated URI
+        Intent openDetail = getIntent();
+        currentProductUri = openDetail.getData();
+
+        categorySpinner = findViewById(R.id.detail_category_spinner);
+        setUpSpinner();
+
+        // Set title of DetailActivity based on if ListView item is selected
+        // or a new product is being added
+        if(currentProductUri == null){
+            // Update title for new product
+            setTitle(getString(R.string.detail_title_new_product));
+        } else {
+            // Update title for selected product
+            setTitle(getString(R.string.title_activity_detail));
+            // initialize loader
+            getLoaderManager().initLoader(DETAIL_LOADER_ID,null,this);
+        }
+
+        nameET = findViewById(R.id.detail_name);
+        productDescriptionET = findViewById(R.id.detail_prod_description);
+        priceET = findViewById(R.id.detail_price);
+        quantityInStockET = findViewById(R.id.detail_quant_in_stock);
+        quantityOnOrderET = findViewById(R.id.detail_quant_on_order);
+        supplierNameET = findViewById((R.id.detail_supplier_name));
+        supplierPhoneET = findViewById(R.id.detail_supplier_phone);
+
+    }
+
+    /**
+     * Set up the dropdown spinner that allows user to select the product category
+     */
+    private void setUpSpinner(){
+        ArrayAdapter categorySpinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.array_category_options,android.R.layout.simple_spinner_item);
+
+        categorySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+
+        categorySpinner.setAdapter(categorySpinnerAdapter);
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                String selection = (String) adapterView.getItemAtPosition(position);
+                if(!TextUtils.isEmpty(selection)){
+                    if(selection.equals(getString(R.string.category_book))){
+                        category = ProductEntry.CATEGORY_BOOK;
+                    } else if (selection.equals(getString(R.string.category_periodical))) {
+                        category = ProductEntry.CATEGORY_PERIODICAL;
+                    } else if (selection.equals(getString(R.string.category_e_device))){
+                        category = ProductEntry.CATEGORY_E_DEVICE;
+                    } else if (selection.equals(getString(R.string.category_office_supply))) {
+                        category = ProductEntry.CATEGORY_OFFICE_SUPPLY;
+                    } else {
+                        category = ProductEntry.CATEGORY_UNKNOWN;
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                category = ProductEntry.CATEGORY_UNKNOWN;
             }
         });
     }
@@ -92,16 +175,106 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-/*
-        // If this is a new pet; hide the 'Delete' menu item
-        if (currentPetUri == null) {
+        // Hide the 'Delete' menu item if a new product
+        if (currentProductUri == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
             menuItem.setVisible(false);
         }
-*/
 
         return true;
     }
 
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        // declare the projection and assign all the columns in the table to return
+        String[] projection = {
+                ProductEntry._ID,
+                ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductEntry.COLUMN_PRODUCT_CATEGORY,
+                ProductEntry.COLUMN_PRODUCT_DESCRIPTION,
+                ProductEntry.COLUMN_PRICE,
+                ProductEntry.COLUMN_QUANTITY_IN_STOCK,
+                ProductEntry.COLUMN_QUANTITY_ON_ORDER,
+                ProductEntry.COLUMN_SUPPLIER_NAME,
+                ProductEntry.COLUMN_SUPPLIER_PHONE
+        };
+
+        return new CursorLoader(this,
+                currentProductUri,
+                projection,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        // Exit early if cursor is null or empty
+        if(cursor == null || cursor.getCount() < 1){
+            return;
+        }
+        // Move cursor to position 0 before extracting values
+        if(cursor.moveToFirst()){
+            int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
+            nameET.setText(cursor.getString(nameColumnIndex));
+
+            int categoryColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_CATEGORY);
+            switch(cursor.getInt(categoryColumnIndex)){
+                case ProductEntry.CATEGORY_UNKNOWN:
+                    categorySpinner.setSelection(0);
+                    break;
+                case ProductEntry.CATEGORY_BOOK:
+                    categorySpinner.setSelection(1);
+                    break;
+                case ProductEntry.CATEGORY_E_DEVICE:
+                    categorySpinner.setSelection(2);
+                    break;
+                case ProductEntry.CATEGORY_OFFICE_SUPPLY:
+                    categorySpinner.setSelection(3);
+                    break;
+                case ProductEntry.CATEGORY_PERIODICAL:
+                    categorySpinner.setSelection(4);
+                    break;
+                default:
+                    categorySpinner.setSelection(0);
+                    break;
+            }
+
+            int prodDescColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_DESCRIPTION);
+            productDescriptionET.setText(cursor.getString(prodDescColumnIndex));
+
+            int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRICE);
+            priceET.setText(String.valueOf(cursor.getInt(priceColumnIndex)));
+
+            int quantInStockColumnIndex = cursor.getColumnIndex(
+                    ProductEntry.COLUMN_QUANTITY_IN_STOCK);
+            quantityInStockET.setText(String.valueOf(cursor.getInt(quantInStockColumnIndex)));
+
+            int quantOnOrderColumnIndex = cursor.getColumnIndex(
+                    ProductEntry.COLUMN_QUANTITY_ON_ORDER);
+            quantityOnOrderET.setText(String.valueOf(cursor.getInt(quantOnOrderColumnIndex)));
+
+            int supplierNameColumnIndex = cursor.getColumnIndex(
+                    ProductEntry.COLUMN_SUPPLIER_NAME);
+            supplierNameET.setText(cursor.getString(supplierNameColumnIndex));
+
+            int supplierPhoneColumnIndex = cursor.getColumnIndex(
+                    ProductEntry.COLUMN_SUPPLIER_PHONE);
+            supplierPhoneET.setText(cursor.getString(supplierPhoneColumnIndex));
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        nameET.setText("");
+        categorySpinner.setSelection(0);
+        productDescriptionET.setText("");
+        priceET.setText("");
+        quantityInStockET.setText("");
+        quantityOnOrderET.setText("");
+        supplierNameET.setText("");
+        supplierPhoneET.setText("");
+
+    }
 }

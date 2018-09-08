@@ -23,6 +23,7 @@
 
     <string name="button_sale">Sale</string>
     <string name="title_activity_detail">Product Details</string>;
+    <string name="detail_title_new_product">Add a Product</string>
 
     <string name="save">Save</string>
     <string name="delete">Delete</string>
@@ -34,6 +35,12 @@
     <string name="quantity_on_order">Quantity On Order</string>
     <string name="supplier_name">Supplier Name</string>
     <string name="supplier_phone">Supplier Phone Number</string>
+
+    <string name="category_unknown">Unknown</string>
+    <string name="category_book">Book</string>
+    <string name="category_periodical">Periodical</string>
+    <string name="category_e_device">Electronic Device</string>
+    <string name="category_office_supply">Office Supply</string>
 
 
 </resources>

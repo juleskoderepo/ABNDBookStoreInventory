@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_category_options">
+        <item>@string/category_unknown</item>
+        <item>@string/category_book</item>
+        <item>@string/category_e_device</item>
+        <item>@string/category_office_supply</item>
+        <item>@string/category_periodical</item>
+    </string-array>
+</resources>

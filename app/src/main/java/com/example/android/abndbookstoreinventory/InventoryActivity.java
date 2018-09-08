@@ -19,6 +19,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.LogPrinter;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -74,13 +75,25 @@ public class InventoryActivity extends AppCompatActivity
         // Attach cursor adapter to ListView
         productListView.setAdapter(cursorAdapter);
 
-        // Decrement the quantity associated with the product item
+        // Open detail screen of item selected/clicked
         productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position,
                                     long id) {
 
+                Log.i(LOG_TAG,"On click called");
+                // Create a new intent to launch the DetailActivity
+                Intent openDetail = new Intent(InventoryActivity.this,
+                        DetailActivity.class);
+                // Form the content URI to the specific product
+                // Append the "id" onto the {@link ProductEntry#CONTENT_URI}
+                Uri currentProductUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, id);
 
+                Log.i(LOG_TAG,"Uri passed in the intent is: " + currentProductUri);
+                // Set the URI on the data field of the intent
+                openDetail.setData(currentProductUri);
+                // Launch the {@link DetailActivity} to display the detail for the current product
+                startActivity(openDetail);
             }
         });
 

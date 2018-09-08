@@ -55,6 +55,7 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/layout_margin_default"
         android:layout_marginRight="@dimen/layout_margin_default"
+        android:focusable="false"
         android:text="@string/button_sale"
         tools:text="@string/button_sale"/>
 
