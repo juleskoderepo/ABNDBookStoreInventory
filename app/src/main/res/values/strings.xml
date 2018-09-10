@@ -22,7 +22,7 @@
     <string name="cancel">Cancel</string>;
 
     <string name="button_sale">Sale</string>
-    <string name="title_activity_detail">Product Details</string>;
+    <string name="title_activity_detail">Edit Product</string>;
     <string name="detail_title_new_product">Add a Product</string>
 
     <string name="save">Save</string>

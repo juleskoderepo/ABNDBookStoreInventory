@@ -1,6 +1,8 @@
 package com.example.android.abndbookstoreinventory;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -130,11 +132,9 @@ public class DetailActivity extends AppCompatActivity
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 // Insert product in table
-/*
-                savePet();
+                saveProduct();
                 // Exit activity
                 finish();
-*/
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
@@ -184,6 +184,62 @@ public class DetailActivity extends AppCompatActivity
         return true;
     }
 
+
+    private void saveProduct(){
+        // Get values from fields, convert to String, and remove leading and trailing whitespace
+        String prodName = nameET.getText().toString().trim();
+        int prodCategory = category;
+        String prodDesc = productDescriptionET.getText().toString().trim();
+        String priceStr = priceET.getText().toString().trim();
+        //convert priceStr value to integer to insert into table
+        //TODO: add logic to convert decimal values to integer
+        Integer prodPrice = 0;
+        if(!priceStr.isEmpty()){
+            prodPrice = Integer.parseInt(priceStr);
+        }
+        String quantInStockStr = quantityInStockET.getText().toString().trim();
+        //convert Quantity In Stock String value to integer
+        Integer prodQuantInStock = 0;
+        if(!quantInStockStr.isEmpty()){
+            prodQuantInStock = Integer.parseInt(quantInStockStr);
+        }
+
+        String quantOnOrder = quantityOnOrderET.getText().toString().trim();
+        Integer prodQuantOnOrder = 0;
+        if(!quantOnOrder.isEmpty()){
+            prodQuantOnOrder = Integer.parseInt(quantOnOrder);
+        }
+
+        String supplierName = supplierNameET.getText().toString().trim();
+        String supplierPhoneNum = supplierPhoneET.getText().toString().trim();
+
+        // TODO: Add data validation and communicate back to user if data is invalid
+
+        // Map of key-value pairs
+        ContentValues values = new ContentValues();
+        values.put(ProductEntry.COLUMN_PRODUCT_NAME,prodName);
+        values.put(ProductEntry.COLUMN_PRODUCT_CATEGORY,prodCategory);
+        values.put(ProductEntry.COLUMN_PRODUCT_DESCRIPTION,prodDesc);
+        values.put(ProductEntry.COLUMN_PRICE,prodPrice);
+        values.put(ProductEntry.COLUMN_QUANTITY_IN_STOCK,prodQuantInStock);
+        values.put(ProductEntry.COLUMN_QUANTITY_ON_ORDER,prodQuantOnOrder);
+        values.put(ProductEntry.COLUMN_SUPPLIER_NAME,supplierName);
+        values.put(ProductEntry.COLUMN_SUPPLIER_PHONE,supplierPhoneNum);
+        // Insert new record
+        if(currentProductUri==null){
+            // Insert new row of values. Return new URI
+            Uri newProdUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+            // Parse ID returned in URI. If error on insert, -1 will be returned
+            long newID = ContentUris.parseId(newProdUri);
+
+            //TODO: Add toast for insert result
+        } else /* Update existing record */ {
+            int rowsUpdated = getContentResolver().update(currentProductUri,values,
+                    null, null);
+            //TODO: Add toast for update result
+        }
+
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
