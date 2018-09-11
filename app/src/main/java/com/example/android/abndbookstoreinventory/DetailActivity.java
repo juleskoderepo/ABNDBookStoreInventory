@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.android.abndbookstoreinventory.data.ProductContract.ProductEntry;
 
@@ -138,6 +139,7 @@ public class DetailActivity extends AppCompatActivity
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
+                deleteProduct();
                 // Confirm delete with user
 //                showDeleteConfirmationDialog();
                 return true;
@@ -239,6 +241,22 @@ public class DetailActivity extends AppCompatActivity
             //TODO: Add toast for update result
         }
 
+    }
+
+    private void deleteProduct(){
+        if(currentProductUri != null){
+            int rowDeleted = getContentResolver().delete(currentProductUri,
+                    null,
+                    null);
+
+            if (rowDeleted == 0){
+                Toast.makeText(this, getString(R.string.edit_delete_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.edit_delete_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override

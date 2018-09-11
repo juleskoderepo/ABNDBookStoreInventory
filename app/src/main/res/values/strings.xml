@@ -42,5 +42,6 @@
     <string name="category_e_device">Electronic Device</string>
     <string name="category_office_supply">Office Supply</string>
 
-
+    <string name="edit_delete_failed">Error deleting product.</string>
+    <string name="edit_delete_successful">Product deleted.</string>
 </resources>
