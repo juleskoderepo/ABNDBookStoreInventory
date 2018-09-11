@@ -1,5 +1,7 @@
 package com.example.android.abndbookstoreinventory;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -139,9 +141,8 @@ public class DetailActivity extends AppCompatActivity
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
-                deleteProduct();
                 // Confirm delete with user
-//                showDeleteConfirmationDialog();
+                showDeleteConfirmationDialog();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
 /*
@@ -241,6 +242,33 @@ public class DetailActivity extends AppCompatActivity
             //TODO: Add toast for update result
         }
 
+    }
+
+    private void showDeleteConfirmationDialog(){
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the positive and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_msg);
+        // Set up positive button
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialogInterface, int id){
+                // 'Delete' button clicked, delete product
+                deleteProduct();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // 'Cancel' clicked, so dismiss dialog and continue editing product
+                if(dialogInterface != null){
+                    dialogInterface.dismiss();
+                }
+            }
+        });
+
+        // Create and show the alert dialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void deleteProduct(){

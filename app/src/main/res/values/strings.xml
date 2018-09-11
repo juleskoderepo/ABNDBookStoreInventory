@@ -44,4 +44,5 @@
 
     <string name="edit_delete_failed">Error deleting product.</string>
     <string name="edit_delete_successful">Product deleted.</string>
+    <string name="delete_dialog_msg">Delete this product?</string>
 </resources>
