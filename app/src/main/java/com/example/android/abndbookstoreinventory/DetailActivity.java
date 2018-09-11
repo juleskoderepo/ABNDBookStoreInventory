@@ -257,6 +257,9 @@ public class DetailActivity extends AppCompatActivity
                         Toast.LENGTH_SHORT).show();
             }
         }
+
+        // Exit activity
+        finish();
     }
 
     @Override
