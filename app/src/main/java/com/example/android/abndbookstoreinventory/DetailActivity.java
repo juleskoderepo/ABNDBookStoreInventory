@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ public class DetailActivity extends AppCompatActivity
     private EditText quantityOnOrderET;
     private EditText supplierNameET;
     private EditText supplierPhoneET;
+    private Button deleteButton;
 
     private int category = ProductEntry.CATEGORY_UNKNOWN;
 
@@ -80,6 +82,20 @@ public class DetailActivity extends AppCompatActivity
         quantityOnOrderET = findViewById(R.id.detail_quant_on_order);
         supplierNameET = findViewById((R.id.detail_supplier_name));
         supplierPhoneET = findViewById(R.id.detail_supplier_phone);
+        deleteButton = findViewById(R.id.delete_button);
+
+        if(currentProductUri != null){
+            deleteButton.setVisibility(View.VISIBLE);
+        } else {
+            deleteButton.setVisibility(View.GONE);
+        }
+
+        deleteButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                showDeleteConfirmationDialog();
+            }
+        });
 
     }
 
@@ -139,11 +155,6 @@ public class DetailActivity extends AppCompatActivity
                 // Exit activity
                 finish();
                 return true;
-            // Respond to a click on the "Delete" menu option
-            case R.id.action_delete:
-                // Confirm delete with user
-                showDeleteConfirmationDialog();
-                return true;
             // Respond to a click on the "Up" arrow button in the app bar
 /*
             case android.R.id.home:
@@ -178,12 +189,6 @@ public class DetailActivity extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        // Hide the 'Delete' menu item if a new product
-        if (currentProductUri == null) {
-            MenuItem menuItem = menu.findItem(R.id.action_delete);
-            menuItem.setVisible(false);
-        }
-
         return true;
     }
 

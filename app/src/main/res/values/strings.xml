@@ -31,6 +31,7 @@
     <string name="product_name">Name</string>
     <string name="price">Price</string>
     <string name="category">Category</string>
+    <string name="product_descripton">Product Description</string>
     <string name="quantity_in_stock">Quantity In Stock</string>
     <string name="quantity_on_order">Quantity On Order</string>
     <string name="supplier_name">Supplier Name</string>
