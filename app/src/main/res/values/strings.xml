@@ -46,4 +46,7 @@
     <string name="edit_delete_failed">Error deleting product.</string>
     <string name="edit_delete_successful">Product deleted.</string>
     <string name="delete_dialog_msg">Delete this product?</string>
+
+    <string name="order">Order</string>
+    <string name="order_phone_num_required_msg">Phone number must be populated to place an order.</string>
 </resources>

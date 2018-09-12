@@ -42,6 +42,7 @@ public class DetailActivity extends AppCompatActivity
     private EditText supplierNameET;
     private EditText supplierPhoneET;
     private Button deleteButton;
+    private Button orderButton;
 
     private int category = ProductEntry.CATEGORY_UNKNOWN;
 
@@ -65,14 +66,14 @@ public class DetailActivity extends AppCompatActivity
 
         // Set title of DetailActivity based on if ListView item is selected
         // or a new product is being added
-        if(currentProductUri == null){
+        if (currentProductUri == null) {
             // Update title for new product
             setTitle(getString(R.string.detail_title_new_product));
         } else {
             // Update title for selected product
             setTitle(getString(R.string.title_activity_detail));
             // initialize loader
-            getLoaderManager().initLoader(DETAIL_LOADER_ID,null,this);
+            getLoaderManager().initLoader(DETAIL_LOADER_ID, null, this);
         }
 
         nameET = findViewById(R.id.detail_name);
@@ -83,17 +84,31 @@ public class DetailActivity extends AppCompatActivity
         supplierNameET = findViewById((R.id.detail_supplier_name));
         supplierPhoneET = findViewById(R.id.detail_supplier_phone);
         deleteButton = findViewById(R.id.delete_button);
+        orderButton = findViewById(R.id.order_button);
 
-        if(currentProductUri != null){
+        // Display the 'Delete' button only for an existing product
+        // Enable the 'Order' button for an existing product with supplier phone number
+        //  field populated.
+        if (currentProductUri != null) {
             deleteButton.setVisibility(View.VISIBLE);
         } else {
             deleteButton.setVisibility(View.GONE);
         }
-
-        deleteButton.setOnClickListener(new View.OnClickListener(){
+        // Call the showDeleteConfirmationDialog method when the 'Delete' button is clicked
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDeleteConfirmationDialog();
+            }
+        });
+
+        // Disable 'Order' button by default
+        orderButton.setEnabled(false);
+        // Call the phoneInOrder method when the 'Order' button is clicked
+        orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                phoneInOrder();
             }
         });
 
@@ -102,9 +117,9 @@ public class DetailActivity extends AppCompatActivity
     /**
      * Set up the dropdown spinner that allows user to select the product category
      */
-    private void setUpSpinner(){
+    private void setUpSpinner() {
         ArrayAdapter categorySpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.array_category_options,android.R.layout.simple_spinner_item);
+                R.array.array_category_options, android.R.layout.simple_spinner_item);
 
         categorySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
@@ -114,12 +129,12 @@ public class DetailActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 String selection = (String) adapterView.getItemAtPosition(position);
-                if(!TextUtils.isEmpty(selection)){
-                    if(selection.equals(getString(R.string.category_book))){
+                if (!TextUtils.isEmpty(selection)) {
+                    if (selection.equals(getString(R.string.category_book))) {
                         category = ProductEntry.CATEGORY_BOOK;
                     } else if (selection.equals(getString(R.string.category_periodical))) {
                         category = ProductEntry.CATEGORY_PERIODICAL;
-                    } else if (selection.equals(getString(R.string.category_e_device))){
+                    } else if (selection.equals(getString(R.string.category_e_device))) {
                         category = ProductEntry.CATEGORY_E_DEVICE;
                     } else if (selection.equals(getString(R.string.category_office_supply))) {
                         category = ProductEntry.CATEGORY_OFFICE_SUPPLY;
@@ -165,9 +180,9 @@ public class DetailActivity extends AppCompatActivity
                 }
 */
 
-                // Otherwise if there are changes, set up a dialog to warn the user
-                // Create a click listener to handle the user confirming that changes
-                // should be discarded
+            // Otherwise if there are changes, set up a dialog to warn the user
+            // Create a click listener to handle the user confirming that changes
+            // should be discarded
 /*
                 DialogInterface.OnClickListener discardButtonClickListener =
                         new DialogInterface.OnClickListener() {
@@ -193,7 +208,7 @@ public class DetailActivity extends AppCompatActivity
     }
 
 
-    private void saveProduct(){
+    private void saveProduct() {
         // Get values from fields, convert to String, and remove leading and trailing whitespace
         String prodName = nameET.getText().toString().trim();
         int prodCategory = category;
@@ -202,19 +217,19 @@ public class DetailActivity extends AppCompatActivity
         //convert priceStr value to integer to insert into table
         //TODO: add logic to convert decimal values to integer
         Integer prodPrice = 0;
-        if(!priceStr.isEmpty()){
+        if (!priceStr.isEmpty()) {
             prodPrice = Integer.parseInt(priceStr);
         }
         String quantInStockStr = quantityInStockET.getText().toString().trim();
         //convert Quantity In Stock String value to integer
         Integer prodQuantInStock = 0;
-        if(!quantInStockStr.isEmpty()){
+        if (!quantInStockStr.isEmpty()) {
             prodQuantInStock = Integer.parseInt(quantInStockStr);
         }
 
         String quantOnOrder = quantityOnOrderET.getText().toString().trim();
         Integer prodQuantOnOrder = 0;
-        if(!quantOnOrder.isEmpty()){
+        if (!quantOnOrder.isEmpty()) {
             prodQuantOnOrder = Integer.parseInt(quantOnOrder);
         }
 
@@ -225,16 +240,16 @@ public class DetailActivity extends AppCompatActivity
 
         // Map of key-value pairs
         ContentValues values = new ContentValues();
-        values.put(ProductEntry.COLUMN_PRODUCT_NAME,prodName);
-        values.put(ProductEntry.COLUMN_PRODUCT_CATEGORY,prodCategory);
-        values.put(ProductEntry.COLUMN_PRODUCT_DESCRIPTION,prodDesc);
-        values.put(ProductEntry.COLUMN_PRICE,prodPrice);
-        values.put(ProductEntry.COLUMN_QUANTITY_IN_STOCK,prodQuantInStock);
-        values.put(ProductEntry.COLUMN_QUANTITY_ON_ORDER,prodQuantOnOrder);
-        values.put(ProductEntry.COLUMN_SUPPLIER_NAME,supplierName);
-        values.put(ProductEntry.COLUMN_SUPPLIER_PHONE,supplierPhoneNum);
+        values.put(ProductEntry.COLUMN_PRODUCT_NAME, prodName);
+        values.put(ProductEntry.COLUMN_PRODUCT_CATEGORY, prodCategory);
+        values.put(ProductEntry.COLUMN_PRODUCT_DESCRIPTION, prodDesc);
+        values.put(ProductEntry.COLUMN_PRICE, prodPrice);
+        values.put(ProductEntry.COLUMN_QUANTITY_IN_STOCK, prodQuantInStock);
+        values.put(ProductEntry.COLUMN_QUANTITY_ON_ORDER, prodQuantOnOrder);
+        values.put(ProductEntry.COLUMN_SUPPLIER_NAME, supplierName);
+        values.put(ProductEntry.COLUMN_SUPPLIER_PHONE, supplierPhoneNum);
         // Insert new record
-        if(currentProductUri==null){
+        if (currentProductUri == null) {
             // Insert new row of values. Return new URI
             Uri newProdUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
             // Parse ID returned in URI. If error on insert, -1 will be returned
@@ -242,21 +257,21 @@ public class DetailActivity extends AppCompatActivity
 
             //TODO: Add toast for insert result
         } else /* Update existing record */ {
-            int rowsUpdated = getContentResolver().update(currentProductUri,values,
+            int rowsUpdated = getContentResolver().update(currentProductUri, values,
                     null, null);
             //TODO: Add toast for update result
         }
 
     }
 
-    private void showDeleteConfirmationDialog(){
+    private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the positive and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.delete_dialog_msg);
         // Set up positive button
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialogInterface, int id){
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int id) {
                 // 'Delete' button clicked, delete product
                 deleteProduct();
             }
@@ -265,7 +280,7 @@ public class DetailActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // 'Cancel' clicked, so dismiss dialog and continue editing product
-                if(dialogInterface != null){
+                if (dialogInterface != null) {
                     dialogInterface.dismiss();
                 }
             }
@@ -276,13 +291,13 @@ public class DetailActivity extends AppCompatActivity
         alertDialog.show();
     }
 
-    private void deleteProduct(){
-        if(currentProductUri != null){
+    private void deleteProduct() {
+        if (currentProductUri != null) {
             int rowDeleted = getContentResolver().delete(currentProductUri,
                     null,
                     null);
 
-            if (rowDeleted == 0){
+            if (rowDeleted == 0) {
                 Toast.makeText(this, getString(R.string.edit_delete_failed),
                         Toast.LENGTH_SHORT).show();
             } else {
@@ -321,16 +336,16 @@ public class DetailActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         // Exit early if cursor is null or empty
-        if(cursor == null || cursor.getCount() < 1){
+        if (cursor == null || cursor.getCount() < 1) {
             return;
         }
         // Move cursor to position 0 before extracting values
-        if(cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
             nameET.setText(cursor.getString(nameColumnIndex));
 
             int categoryColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_CATEGORY);
-            switch(cursor.getInt(categoryColumnIndex)){
+            switch (cursor.getInt(categoryColumnIndex)) {
                 case ProductEntry.CATEGORY_UNKNOWN:
                     categorySpinner.setSelection(0);
                     break;
@@ -372,6 +387,11 @@ public class DetailActivity extends AppCompatActivity
             int supplierPhoneColumnIndex = cursor.getColumnIndex(
                     ProductEntry.COLUMN_SUPPLIER_PHONE);
             supplierPhoneET.setText(cursor.getString(supplierPhoneColumnIndex));
+
+            // Enable the 'Order' button only if a phone number is present
+            if(!supplierPhoneET.getText().toString().isEmpty()){
+                orderButton.setEnabled(true);
+            }
         }
     }
 
@@ -386,5 +406,19 @@ public class DetailActivity extends AppCompatActivity
         supplierNameET.setText("");
         supplierPhoneET.setText("");
 
+    }
+
+    private void phoneInOrder() {
+        if (supplierPhoneET.getText().toString().isEmpty()) {
+            Toast.makeText(this,getString(R.string.order_phone_num_required_msg),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+        dialIntent.setData(Uri.parse("tel:" + supplierPhoneET.getText().toString()));
+        if (dialIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(dialIntent);
+        }
     }
 }
