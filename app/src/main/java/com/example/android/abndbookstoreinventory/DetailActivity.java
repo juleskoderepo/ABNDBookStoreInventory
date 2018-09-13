@@ -16,6 +16,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,15 +39,25 @@ public class DetailActivity extends AppCompatActivity
     private EditText productDescriptionET;
     private EditText priceET;
     private EditText quantityInStockET;
+    private String quantInStockStr;
     private EditText quantityOnOrderET;
+    private String quantOnOrderStr;
     private EditText supplierNameET;
     private EditText supplierPhoneET;
     private Button deleteButton;
     private Button orderButton;
+    private Button qisAddButton;
+    private Button qisSubtractButton;
+    private Button qooAddButton;
+    private Button qooSubtractButton;
+
 
     private int category = ProductEntry.CATEGORY_UNKNOWN;
 
+    private static final String LOG_TAG = DetailActivity.class.getSimpleName();
     private static final int DETAIL_LOADER_ID = 901;
+    private static final int INCREMENT_DEFAULT = 1;
+    private static final int DECREMENT_DEFAULT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +96,60 @@ public class DetailActivity extends AppCompatActivity
         supplierPhoneET = findViewById(R.id.detail_supplier_phone);
         deleteButton = findViewById(R.id.delete_button);
         orderButton = findViewById(R.id.order_button);
+        qisAddButton = findViewById(R.id.qis_increase_button);
+        qisSubtractButton = findViewById(R.id.qis_decrease_button);
+        qooAddButton = findViewById(R.id.qoo_increase_button);
+        qooSubtractButton = findViewById(R.id.qoo_decrease_button);
+
+        // Listen for quantity in stock add button click
+        qisAddButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                quantInStockStr = quantityInStockET.getText().toString().trim();
+                incrementQuantity(R.id.qis_increase_button);
+            }
+        });
+
+        // Listen for quantity in stock subtract button click
+        qisSubtractButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                quantInStockStr = quantityInStockET.getText().toString().trim();
+                // Check that value is > 0 before decrementing
+                if(Integer.parseInt(quantInStockStr) > 0) {
+                    decrementQuantity(R.id.qis_decrease_button);
+                } else {
+                    Toast.makeText(DetailActivity.this,
+                            getString(R.string.quantity_negative_value_warning),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // Listen for quantity in stock add button click
+        qooAddButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                quantOnOrderStr = quantityOnOrderET.getText().toString().trim();
+                incrementQuantity(R.id.qoo_increase_button);
+            }
+        });
+
+        // Listen for quantity in stock subtract button click
+        qooSubtractButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                quantOnOrderStr = quantityOnOrderET.getText().toString().trim();
+                // Check that value is > 0 before decrementing
+                if(Integer.parseInt(quantOnOrderStr) > 0) {
+                    decrementQuantity(R.id.qoo_decrease_button);
+                } else {
+                    Toast.makeText(DetailActivity.this,
+                            getString(R.string.quantity_negative_value_warning),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         // Display the 'Delete' button only for an existing product
         // Enable the 'Order' button for an existing product with supplier phone number
@@ -220,17 +285,17 @@ public class DetailActivity extends AppCompatActivity
         if (!priceStr.isEmpty()) {
             prodPrice = Integer.parseInt(priceStr);
         }
-        String quantInStockStr = quantityInStockET.getText().toString().trim();
+        quantInStockStr = quantityInStockET.getText().toString().trim();
         //convert Quantity In Stock String value to integer
         Integer prodQuantInStock = 0;
         if (!quantInStockStr.isEmpty()) {
             prodQuantInStock = Integer.parseInt(quantInStockStr);
         }
 
-        String quantOnOrder = quantityOnOrderET.getText().toString().trim();
+        quantOnOrderStr = quantityOnOrderET.getText().toString().trim();
         Integer prodQuantOnOrder = 0;
-        if (!quantOnOrder.isEmpty()) {
-            prodQuantOnOrder = Integer.parseInt(quantOnOrder);
+        if (!quantOnOrderStr.isEmpty()) {
+            prodQuantOnOrder = Integer.parseInt(quantOnOrderStr);
         }
 
         String supplierName = supplierNameET.getText().toString().trim();
@@ -406,6 +471,48 @@ public class DetailActivity extends AppCompatActivity
         supplierNameET.setText("");
         supplierPhoneET.setText("");
 
+    }
+
+    private void incrementQuantity(int buttonId){
+        switch(buttonId){
+            case R.id.qis_increase_button:
+                //quantInStockStr = quantityInStockET.getText().toString().trim();
+                Log.i(LOG_TAG + ".incrementQuantity()",
+                        "Quantity in stock string value is: " + quantInStockStr);
+                int quantityInStock = Integer.parseInt(quantInStockStr);
+                Log.i(LOG_TAG + ".incrementQuantity()",
+                        "Quantity in stock int value is: " + quantityInStock);
+                quantityInStock += 1;
+                Log.i(LOG_TAG + ".incrementQuantity()",
+                        "Quantity in stock incremented value is: " + quantityInStock);
+                quantityInStockET.setText(String.valueOf(quantityInStock));
+                break;
+            case R.id.qoo_increase_button:
+                int quantityOnOrder = Integer.parseInt(quantOnOrderStr);
+                quantityOnOrder += 1;
+                quantityOnOrderET.setText(String.valueOf(quantityOnOrder));
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void decrementQuantity(int buttonId){
+        switch(buttonId){
+            case R.id.qis_decrease_button:
+                // Convert field value (String) to int so calculation can be performed on it
+                int quantityInStock = Integer.parseInt(quantInStockStr);
+                quantityInStock -=  1;
+                quantityInStockET.setText(String.valueOf(quantityInStock));
+                break;
+            case R.id.qoo_decrease_button:
+                int quantityOnOrder = Integer.parseInt(quantOnOrderStr);
+                quantityOnOrder -= 1;
+                quantityOnOrderET.setText(String.valueOf(quantityOnOrder));
+                break;
+            default:
+                break;
+        }
     }
 
     private void phoneInOrder() {
