@@ -69,38 +69,78 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/detail_prod_description" />
 
-    <EditText
-        android:id="@+id/detail_quant_in_stock"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+    <Button
+        android:id="@+id/qis_inc_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/quantity_in_stock"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:text="@string/quantity_decrease"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/detail_quant_in_stock"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/detail_price" />
 
     <EditText
-        android:id="@+id/detail_quant_on_order"
-        android:layout_width="0dp"
+        android:id="@+id/detail_quant_in_stock"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/quantity_in_stock"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@+id/qis_decrease_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/qis_inc_button"
+        app:layout_constraintTop_toBottomOf="@+id/detail_price" />
+
+    <Button
+        android:id="@+id/qis_decrease_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/quantity_increase"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/detail_quant_in_stock"
+        app:layout_constraintTop_toBottomOf="@+id/detail_price" />
+
+    <Button
+        android:id="@+id/qoo_decrease_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/quantity_decrease"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/detail_quant_on_order"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock" />
+
+    <EditText
+        android:id="@+id/detail_quant_on_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/quantity_on_order"
         android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/qoo_increase_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/qoo_decrease_button"
+        app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock" />
+
+    <Button
+        android:id="@+id/qoo_increase_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/quantity_increase"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/detail_quant_on_order"
         app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock" />
 
     <EditText
@@ -131,15 +171,14 @@
         android:layout_centerHorizontal="false"
         android:layout_centerInParent="false"
         android:layout_centerVertical="false"
-        android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/supplier_phone"
         android:inputType="phone"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/order_button"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/detail_supplier_name" />
 
@@ -153,11 +192,13 @@
         android:layout_centerVertical="false"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:focusable="false"
         android:minHeight="0dp"
         android:text="@string/order"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/detail_supplier_phone"
         app:layout_constraintTop_toBottomOf="@+id/detail_supplier_name" />
 
     <Button
@@ -170,5 +211,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <android.support.v4.view.ViewPager
+        android:layout_width="395dp"
+        android:layout_height="114dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="416dp" />
 
 </android.support.constraint.ConstraintLayout>

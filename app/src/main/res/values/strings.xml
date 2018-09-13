@@ -49,4 +49,7 @@
 
     <string name="order">Order</string>
     <string name="order_phone_num_required_msg">Phone number must be populated to place an order.</string>
+
+    <string name="quantity_increase">+</string>
+    <string name="quantity_decrease">-</string>
 </resources>
