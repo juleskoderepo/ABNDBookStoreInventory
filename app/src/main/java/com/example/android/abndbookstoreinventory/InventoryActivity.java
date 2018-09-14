@@ -81,7 +81,7 @@ public class InventoryActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> adapterView, View view, int position,
                                     long id) {
 
-                Log.i(LOG_TAG,"On click called");
+                Log.i(LOG_TAG,"List item clicked");
                 // Create a new intent to launch the DetailActivity
                 Intent openDetail = new Intent(InventoryActivity.this,
                         DetailActivity.class);

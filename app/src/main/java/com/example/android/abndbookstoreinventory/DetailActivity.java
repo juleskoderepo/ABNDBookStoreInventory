@@ -151,6 +151,13 @@ public class DetailActivity extends AppCompatActivity
             }
         });
 
+        // Initialize price and quantity fields for new product
+        if(currentProductUri == null){
+            priceET.setText("0");
+            quantityInStockET.setText("0");
+            quantityOnOrderET.setText("0");
+        }
+
         // Display the 'Delete' button only for an existing product
         // Enable the 'Order' button for an existing product with supplier phone number
         //  field populated.
@@ -232,8 +239,6 @@ public class DetailActivity extends AppCompatActivity
             case R.id.action_save:
                 // Insert product in table
                 saveProduct();
-                // Exit activity
-                finish();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
 /*
@@ -301,8 +306,6 @@ public class DetailActivity extends AppCompatActivity
         String supplierName = supplierNameET.getText().toString().trim();
         String supplierPhoneNum = supplierPhoneET.getText().toString().trim();
 
-        // TODO: Add data validation and communicate back to user if data is invalid
-
         // Map of key-value pairs
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, prodName);
@@ -317,16 +320,28 @@ public class DetailActivity extends AppCompatActivity
         if (currentProductUri == null) {
             // Insert new row of values. Return new URI
             Uri newProdUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
-            // Parse ID returned in URI. If error on insert, -1 will be returned
-            long newID = ContentUris.parseId(newProdUri);
 
-            //TODO: Add toast for insert result
+            if(newProdUri != null){
+                // Parse ID returned in URI. If error on insert, -1 will be returned
+                long newId = ContentUris.parseId(newProdUri);
+                if(newId == -1 ) {
+                    Toast.makeText(this, getString(R.string.save_failed),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, getString(R.string.save_successful),
+                            Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
         } else /* Update existing record */ {
             int rowsUpdated = getContentResolver().update(currentProductUri, values,
                     null, null);
-            //TODO: Add toast for update result
+            if(rowsUpdated == 1){
+                Toast.makeText(this,getString(R.string.save_successful),
+                        Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
-
     }
 
     private void showDeleteConfirmationDialog() {
@@ -528,4 +543,6 @@ public class DetailActivity extends AppCompatActivity
             startActivity(dialIntent);
         }
     }
+
+
 }

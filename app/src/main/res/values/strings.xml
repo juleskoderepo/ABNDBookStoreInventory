@@ -53,4 +53,8 @@
     <string name="quantity_increase">+</string>
     <string name="quantity_decrease">-</string>
     <string name="quantity_negative_value_warning">Quantity cannot be less than 0.</string>
+
+    <string name="populate_all_fields_msg">Please populate all fields before saving.</string>
+    <string name="save_successful">Save successful!</string>
+    <string name="save_failed">Save failed. Please check all values entered.</string>
 </resources>

@@ -3,13 +3,19 @@ package com.example.android.abndbookstoreinventory.data;
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.android.abndbookstoreinventory.DetailActivity;
+import com.example.android.abndbookstoreinventory.R;
 
 public class ProductProvider extends ContentProvider {
 
@@ -41,12 +47,23 @@ public class ProductProvider extends ContentProvider {
                 ProductContract.PATH_PRODUCTS + "/#", PRODUCT_ID);
     }
 
+
     @Override
     public boolean onCreate() {
         prodDbHelper = new ProductDbHelper(getContext());
         return true;
     }
 
+    /**
+     * Query the db table if the URI is valid.
+     *
+     * @param uri URI used to perform query
+     * @param projection Columns to be returned in query results
+     * @param selection Columns to be used in WHERE clause of query statement
+     * @param selectionArgs Values corresponding to the columns in the WHERE clause
+     * @param sortOrder The way results are to be sorted when returned
+     * @return Cursor containing db query results
+     */
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection,
@@ -89,9 +106,9 @@ public class ProductProvider extends ContentProvider {
     }
 
     /**
-     * Returns the MIME type of data for the content URI
+     * Returns the MIME type of data at the content URI
      * @param uri uri value passed to the content provider
-     * @return
+     * @return MIME type of the data for either a single record or multiple items
      */
     @Nullable
     @Override
@@ -135,7 +152,9 @@ public class ProductProvider extends ContentProvider {
      * @return new URI appended with ID assigned to the inserted row
      */
     private Uri insertProduct(Uri uri, ContentValues contentValues){
-        // TODO: Add validation
+        if(!validateData(contentValues)){
+            return null;
+        };
 
         // get a writable db instance
         SQLiteDatabase db = prodDbHelper.getWritableDatabase();
@@ -156,6 +175,15 @@ public class ProductProvider extends ContentProvider {
         return ContentUris.withAppendedId(uri,newRowId);
     }
 
+    /**
+     * Delete row or rows given the selection and selectionArgs passed in
+     * if the URI is valid.
+     *
+     * @param uri Content URI used to perform the delete
+     * @param selection Column to be used in the WHERE clause of the delete statement
+     * @param selectionArgs Value corresponding to the column in the WHERE clause
+     * @return The number of rows deleted.
+     */
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection,
                       @Nullable String[] selectionArgs) {
@@ -190,6 +218,20 @@ public class ProductProvider extends ContentProvider {
         return rowsDeleted;
     }
 
+    /**
+     * Update data in the db through the provider with the given ContentValues
+     * if the URI is valid.
+     * This method calls a helper method to perform the actual update.
+     *
+     * @param uri Content URI used to perform db update
+     * @param contentValues Key-value pairs of table columns and corresponding values to update.
+     * @param selection Columns to be used in the WHERE clause of the update statement.
+     *                  In this case, the ID column will be used to identify the specific row
+     *                  to be updated.
+     * @param selectionArgs Values corresponding to the columns to be used in the WHERE clause.
+     *                      In this case, the ID value will be parsed from URI passed in.
+     * @return The number of rows updated.
+     */
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues,
                       @Nullable String selection, @Nullable String[] selectionArgs) {
@@ -208,14 +250,32 @@ public class ProductProvider extends ContentProvider {
         }
     }
 
+    /**
+     * Helper method to perform db update.
+     *
+     * @param uri Content URI used to perform db update
+     * @param contentValues Key-value pairs of table columns and corresponding values to update.
+     * @param selection Columns to be used in the WHERE clause of the update statement.
+     *                  In this case, the ID column will be used to identify the specific row
+     *                  to be updated.
+     * @param selectionArgs Values corresponding to the columns to be used in the WHERE clause.
+     *                      In this case, the ID value will be parsed from URI passed in.
+     * @return The number of rows updated.
+     */
     private int updateProduct(Uri uri, ContentValues contentValues, String selection,
                               String[] selectionArgs){
 
+        // Return 0 (rows updated) if there are no columns and corresponding values passed in
         if(contentValues.size() == 0){
             return 0;
         }
-
-        //TODO: Add validation
+        // Validate all data fields when save initiated from detail screen
+        if(contentValues.size() > 1) {
+            // Return 0 (rows updated) if any invalid data is detected
+            if (!validateData(contentValues)) {
+                return 0;
+            }
+        }
 
         // Get writable db
         SQLiteDatabase db = prodDbHelper.getWritableDatabase();
@@ -232,5 +292,83 @@ public class ProductProvider extends ContentProvider {
         // Return number of rows updated
         return rowsUpdated;
 
+    }
+
+    /**
+     * Determine if data values are null or empty or otherwise invalid.
+     * Display a toast message informing the user of correct data entry.
+     *
+     * @param contentValues Key-value pairs of table columns and corresponding values to be validated
+     * @return true, if all values are valid, or false, if any value is invalid
+     */
+    private boolean validateData(ContentValues contentValues){
+        boolean dataIsValid = false;
+        // Validate that all values are not null or empty
+        String name = contentValues.getAsString(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME);
+        Integer category = contentValues.getAsInteger(
+                ProductContract.ProductEntry.COLUMN_PRODUCT_CATEGORY);
+        String description = contentValues.getAsString(
+                ProductContract.ProductEntry.COLUMN_PRODUCT_DESCRIPTION);
+        Integer price = contentValues.getAsInteger(ProductContract.ProductEntry.COLUMN_PRICE);
+        Integer quantityInStock = contentValues.getAsInteger(
+                ProductContract.ProductEntry.COLUMN_QUANTITY_IN_STOCK);
+        Integer quantityOnOrder = contentValues.getAsInteger(
+                ProductContract.ProductEntry.COLUMN_QUANTITY_ON_ORDER);
+        String supplierName = contentValues.getAsString(
+                ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME);
+        String supplierPhone = contentValues.getAsString(
+                ProductContract.ProductEntry.COLUMN_SUPPLIER_PHONE);
+
+        if(name == null || name.isEmpty()){
+            Toast.makeText(getContext(),"Please enter a name before saving.",
+                    Toast.LENGTH_SHORT).show();
+            return dataIsValid;
+        }
+
+        if(category == null || !ProductContract.ProductEntry.isValidCategory(category)) {
+            Log.i(LOG_TAG,"Category in contentValues is: " + category);
+            Toast.makeText(getContext(),"Please select a valid category",
+                    Toast.LENGTH_SHORT).show();
+            return dataIsValid;
+        }
+
+        if(description == null || description.isEmpty()){
+            Toast.makeText(getContext(), "Please enter a product description",
+                    Toast.LENGTH_SHORT).show();
+            return dataIsValid;
+        }
+
+        if(price == null || price < 0){
+            Toast.makeText(getContext(), "Please enter a valid price",
+                    Toast.LENGTH_SHORT).show();
+            return dataIsValid;
+        }
+
+        if(quantityInStock == null || quantityInStock < 0){
+            Toast.makeText(getContext(), "Please enter a valid quantity in stock",
+                    Toast.LENGTH_SHORT).show();
+            return dataIsValid;
+        }
+
+        if(quantityOnOrder == null || quantityOnOrder < 0){
+            Toast.makeText(getContext(), "Please enter a valid quantity on order",
+                    Toast.LENGTH_SHORT).show();
+            return dataIsValid;
+        }
+
+        if(supplierName == null || supplierName.isEmpty()){
+            Toast.makeText(getContext(), "Please enter supplier name",
+                    Toast.LENGTH_SHORT).show();
+            return dataIsValid;
+        }
+
+        if(supplierPhone == null || supplierPhone.isEmpty()){
+            Toast.makeText(getContext(), "Please enter supplier phone number",
+                    Toast.LENGTH_SHORT).show();
+            return dataIsValid;
+        }
+
+        dataIsValid = true;
+        return dataIsValid;
     }
 }
