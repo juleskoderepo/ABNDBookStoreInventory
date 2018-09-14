@@ -1,50 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/product_item"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/product_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/layout_margin_vertical"
-            android:layout_marginLeft="@dimen/layout_margin_default"
-            android:layout_marginRight="@dimen/layout_margin_default"
-            android:layout_marginTop="@dimen/layout_margin_vertical"
-            android:fontFamily="san-serif-medium"
-            android:textAppearance="?android:textAppearanceMedium"
-            tools:text="War and Peace" />
+    <TextView
+        android:id="@+id/name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/product_name"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        app:layout_constraintEnd_toStartOf="@+id/product_name"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/layout_margin_vertical"
-            android:layout_marginLeft="@dimen/layout_margin_default"
-            android:layout_marginRight="@dimen/layout_margin_default"
-            android:fontFamily="san-serif"
-            android:textAppearance="?android:textAppearanceSmall"
-            tools:text="$9.99" />
+    <TextView
+        android:id="@+id/product_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:fontFamily="san-serif-medium"
+        android:textAppearance="?android:textAppearanceMedium"
+        app:layout_constraintBaseline_toBaselineOf="@+id/name_label"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toEndOf="@+id/name_label"
+        tools:text="War and Peace" />
 
-        <TextView
-            android:id="@+id/quantity_in_stock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/layout_margin_vertical"
-            android:layout_marginLeft="@dimen/layout_margin_default"
-            android:layout_marginRight="@dimen/layout_margin_default"
-            android:fontFamily="san-serif"
-            android:textAppearance="?android:textAppearanceSmall"
-            tools:text="2" />
+    <TextView
+        android:id="@+id/price_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/price"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        app:layout_constraintEnd_toStartOf="@+id/price"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/product_name" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="0dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:fontFamily="san-serif"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        app:layout_constraintBaseline_toBaselineOf="@+id/price_label"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toEndOf="@+id/price_label"
+        tools:text="$9.99" />
+
+    <TextView
+        android:id="@+id/quantity_in_stock_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/quantity_in_stock"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/quantity_in_stock"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/price_label" />
+
+    <TextView
+        android:id="@+id/quantity_in_stock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:fontFamily="san-serif"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        app:layout_constraintBaseline_toBaselineOf="@+id/quantity_in_stock_label"
+        app:layout_constraintStart_toEndOf="@+id/quantity_in_stock_label"
+        tools:text="2" />
+
 
     <Button
         android:id="@+id/sale_button"
@@ -53,10 +102,25 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/layout_margin_default"
-        android:layout_marginRight="@dimen/layout_margin_default"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:focusable="false"
         android:text="@string/button_sale"
-        tools:text="@string/button_sale"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/button_sale" />
 
-</RelativeLayout>
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.73" />
+
+</android.support.constraint.ConstraintLayout>
