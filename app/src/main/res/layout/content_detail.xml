@@ -212,10 +212,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <android.support.v4.view.ViewPager
-        android:layout_width="395dp"
-        android:layout_height="114dp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="416dp" />
-
 </android.support.constraint.ConstraintLayout>
