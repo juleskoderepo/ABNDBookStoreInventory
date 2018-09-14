@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.example.android.abndbookstoreinventory.data.ProductContract;
 
+import java.math.BigDecimal;
+
 public class ProductCursorAdapter extends CursorAdapter {
 
     /**
@@ -80,9 +82,13 @@ public class ProductCursorAdapter extends CursorAdapter {
         Integer productPrice = cursor.getInt(priceColumnIndex);
         final Integer quantityInStock = cursor.getInt(qisColumnIndex);
 
+        BigDecimal formattedPrice = BigDecimal.valueOf(productPrice);
+        formattedPrice = formattedPrice.divide(BigDecimal.valueOf(100),2,
+                BigDecimal.ROUND_HALF_UP);
+
         // Populate fields with extracted properties
         holder.nameTV.setText(productName);
-        holder.priceTV.setText(Integer.toString(productPrice));
+        holder.priceTV.setText(String.valueOf(formattedPrice));
         holder.qisTV.setText(Integer.toString(quantityInStock));
         holder.saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
