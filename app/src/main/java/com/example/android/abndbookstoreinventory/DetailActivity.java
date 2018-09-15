@@ -30,6 +30,10 @@ import android.widget.Toast;
 
 import com.example.android.abndbookstoreinventory.data.ProductContract.ProductEntry;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class DetailActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -355,7 +359,15 @@ public class DetailActivity extends AppCompatActivity
             productDescriptionET.setText(cursor.getString(prodDescColumnIndex));
 
             int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRICE);
-            priceET.setText(String.valueOf(cursor.getInt(priceColumnIndex)));
+            // Extract price value from price column
+            double priceDbl = cursor.getInt(priceColumnIndex);
+            // Convert price value to decimal
+            priceDbl = priceDbl/100;
+            // Create a formatter for currency based on the default locale
+            NumberFormat currencyFormatter =
+                    NumberFormat.getCurrencyInstance(Locale.getDefault());
+            // Convert decimal to string and set string on EditText view
+            priceET.setText(currencyFormatter.format(priceDbl));
 
             int quantInStockColumnIndex = cursor.getColumnIndex(
                     ProductEntry.COLUMN_QUANTITY_IN_STOCK);

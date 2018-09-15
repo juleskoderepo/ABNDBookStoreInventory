@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.example.android.abndbookstoreinventory.data.ProductContract;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class ProductCursorAdapter extends CursorAdapter {
 
@@ -79,16 +81,19 @@ public class ProductCursorAdapter extends CursorAdapter {
         // Extract properties from cursor
         final Integer id = cursor.getInt(idColumnIndex);
         String productName = cursor.getString(nameColumnIndex);
-        Integer productPrice = cursor.getInt(priceColumnIndex);
+        double productPrice = cursor.getInt(priceColumnIndex);
         final Integer quantityInStock = cursor.getInt(qisColumnIndex);
-
-        BigDecimal formattedPrice = BigDecimal.valueOf(productPrice);
-        formattedPrice = formattedPrice.divide(BigDecimal.valueOf(100),2,
-                BigDecimal.ROUND_HALF_UP);
 
         // Populate fields with extracted properties
         holder.nameTV.setText(productName);
-        holder.priceTV.setText(String.valueOf(formattedPrice));
+
+        // Convert price value to decimal
+        double priceDecimal = productPrice/100;
+        // Create a formatter for currency based on the default locale
+        NumberFormat currencyFormatter =
+                NumberFormat.getCurrencyInstance(Locale.getDefault());
+        // Set price value in currency format on EditText view
+        holder.priceTV.setText(currencyFormatter.format(priceDecimal));
         holder.qisTV.setText(Integer.toString(quantityInStock));
         holder.saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
