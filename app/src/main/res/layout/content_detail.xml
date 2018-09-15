@@ -1,217 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="0dp"
-    android:minWidth="0dp"
+    android:fillViewport="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".DetailActivity"
-    tools:showIn="@layout/activity_detail">
+    >
 
-    <EditText
-        android:id="@+id/detail_name"
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="@string/product_name"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Spinner
-        android:id="@+id/detail_category_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_name" />
-
-    <EditText
-        android:id="@+id/detail_prod_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/product_descripton"
-        android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_category_spinner" />
-
-    <EditText
-        android:id="@+id/detail_price"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/price"
-        android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_prod_description" />
-
-    <Button
-        android:id="@+id/qis_decrease_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/quantity_decrease"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/detail_quant_in_stock"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_price" />
-
-    <EditText
-        android:id="@+id/detail_quant_in_stock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/quantity_in_stock"
-        android:inputType="number"
-        app:layout_constraintEnd_toStartOf="@+id/qis_increase_button"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/qis_decrease_button"
-        app:layout_constraintTop_toBottomOf="@+id/detail_price" />
-
-    <Button
-        android:id="@+id/qis_increase_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/quantity_increase"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/detail_quant_in_stock"
-        app:layout_constraintTop_toBottomOf="@+id/detail_price" />
-
-    <Button
-        android:id="@+id/qoo_decrease_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/quantity_decrease"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/detail_quant_on_order"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock" />
-
-    <EditText
-        android:id="@+id/detail_quant_on_order"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/quantity_on_order"
-        android:inputType="number"
-        app:layout_constraintEnd_toStartOf="@+id/qoo_increase_button"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/qoo_decrease_button"
-        app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock" />
-
-    <Button
-        android:id="@+id/qoo_increase_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/quantity_increase"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/detail_quant_on_order"
-        app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock" />
-
-    <EditText
-        android:id="@+id/detail_supplier_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/supplier_name"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_quant_on_order" />
-
-    <EditText
-        android:id="@+id/detail_supplier_phone"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="false"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="false"
-        android:layout_centerHorizontal="false"
-        android:layout_centerInParent="false"
-        android:layout_centerVertical="false"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/supplier_phone"
-        android:inputType="phone"
-        app:layout_constraintEnd_toStartOf="@+id/order_button"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_supplier_name" />
-
-    <Button
-        android:id="@+id/order_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="false"
-        android:layout_centerVertical="false"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:focusable="false"
+        android:layout_height="match_parent"
         android:minHeight="0dp"
-        android:text="@string/order"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/detail_supplier_phone"
-        app:layout_constraintTop_toBottomOf="@+id/detail_supplier_name" />
+        android:minWidth="0dp"
+        tools:context=".DetailActivity"
+        tools:showIn="@layout/activity_detail">
+
+        <EditText
+            android:id="@+id/detail_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="@string/product_name"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+            android:id="@+id/detail_category_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_name" />
+
+        <EditText
+            android:id="@+id/detail_prod_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/product_descripton"
+            android:inputType="textMultiLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_category_spinner" />
+
+        <EditText
+            android:id="@+id/detail_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/price"
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_prod_description" />
+
+        <Button
+            android:id="@+id/qis_decrease_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/quantity_decrease"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/detail_quant_in_stock"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_price" />
+
+        <EditText
+            android:id="@+id/detail_quant_in_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/quantity_in_stock"
+            android:inputType="number"
+            app:layout_constraintEnd_toStartOf="@+id/qis_increase_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/qis_decrease_button"
+            app:layout_constraintTop_toBottomOf="@+id/detail_price" />
+
+        <Button
+            android:id="@+id/qis_increase_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/quantity_increase"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/detail_quant_in_stock"
+            app:layout_constraintTop_toBottomOf="@+id/detail_price" />
+
+        <Button
+            android:id="@+id/qoo_decrease_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/quantity_decrease"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/detail_quant_on_order"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock" />
+
+        <EditText
+            android:id="@+id/detail_quant_on_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/quantity_on_order"
+            android:inputType="number"
+            app:layout_constraintEnd_toStartOf="@+id/qoo_increase_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/qoo_decrease_button"
+            app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock" />
+
+        <Button
+            android:id="@+id/qoo_increase_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/quantity_increase"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/detail_quant_on_order"
+            app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock" />
+
+        <EditText
+            android:id="@+id/detail_supplier_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/supplier_name"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_quant_on_order" />
+
+        <EditText
+            android:id="@+id/detail_supplier_phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="false"
+            android:layout_centerHorizontal="false"
+            android:layout_centerInParent="false"
+            android:layout_centerVertical="false"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/supplier_phone"
+            android:inputType="phone"
+            app:layout_constraintEnd_toStartOf="@+id/order_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_supplier_name" />
+
+        <Button
+            android:id="@+id/order_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="false"
+            android:layout_centerVertical="false"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:focusable="false"
+            android:minHeight="0dp"
+            android:text="@string/order"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/detail_supplier_phone"
+            app:layout_constraintTop_toBottomOf="@+id/detail_supplier_name" />
 
 
-    <Button
-        android:id="@+id/delete_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:focusable="false"
-        android:text="@string/delete"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp"
+            android:focusable="false"
+            android:text="@string/delete"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_supplier_phone"
+            app:layout_constraintVertical_bias="0.905" />
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>
