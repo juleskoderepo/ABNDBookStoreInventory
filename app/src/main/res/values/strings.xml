@@ -35,7 +35,7 @@
     <string name="quantity_in_stock">Quantity In Stock</string>
     <string name="quantity_on_order">Quantity On Order</string>
     <string name="supplier_name">Supplier Name</string>
-    <string name="supplier_phone">Supplier Phone Number\n(000) 000-0000</string>
+    <string name="supplier_phone">Supplier Phone Number</string>
 
     <string name="category_unknown">Unknown</string>
     <string name="category_book">Book</string>

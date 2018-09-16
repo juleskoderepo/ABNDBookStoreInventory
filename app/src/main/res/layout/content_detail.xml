@@ -14,216 +14,293 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:minHeight="0dp"
-        android:minWidth="0dp"
+        android:minHeight="@dimen/min_size"
+        android:minWidth="@dimen/min_size"
         tools:context=".DetailActivity"
         tools:showIn="@layout/activity_detail">
 
-        <EditText
-            android:id="@+id/detail_name"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/detail_name_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:ems="10"
-            android:hint="@string/product_name"
-            android:inputType="text"
+            android:layout_marginEnd="@dimen/layout_margin_default"
+            android:layout_marginLeft="@dimen/layout_margin_default"
+            android:layout_marginRight="@dimen/layout_margin_default"
+            android:layout_marginStart="@dimen/layout_margin_default"
+            android:layout_marginTop="@dimen/layout_margin_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/detail_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="@string/product_name"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/spinner_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_margin_default"
+            android:layout_marginStart="@dimen/layout_margin_default"
+            android:layout_marginTop="@dimen/layout_margin_vertical"
+            android:layout_weight="@dimen/layout_weight_default"
+            android:text="@string/category"
+            android:textSize="@dimen/label_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_name_text_input_layout" />
 
         <Spinner
             android:id="@+id/detail_category_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="@dimen/layout_margin_default"
+            android:layout_marginStart="@dimen/layout_margin_default"
+            android:layout_marginTop="@dimen/layout_margin_vertical_small"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_name" />
+            app:layout_constraintTop_toBottomOf="@+id/spinner_label" />
 
-        <EditText
-            android:id="@+id/detail_prod_description"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/detail_desc_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="@string/product_descripton"
-            android:inputType="textMultiLine"
+            android:layout_marginEnd="@dimen/layout_margin_default"
+            android:layout_marginLeft="@dimen/layout_margin_default"
+            android:layout_marginRight="@dimen/layout_margin_default"
+            android:layout_marginStart="@dimen/layout_margin_default"
+            android:layout_marginTop="@dimen/layout_margin_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_category_spinner" />
+            app:layout_constraintTop_toBottomOf="@+id/detail_category_spinner">
 
-        <EditText
-            android:id="@+id/detail_price"
-            android:layout_width="0dp"
+            <EditText
+                android:id="@+id/detail_prod_description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="@string/product_descripton"
+                android:inputType="textMultiLine"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/detail_price_text_input_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="@string/price"
-            android:inputType="numberDecimal"
+            android:layout_marginEnd="@dimen/layout_margin_default"
+            android:layout_marginLeft="@dimen/layout_margin_default"
+            android:layout_marginRight="@dimen/layout_margin_default"
+            android:layout_marginStart="@dimen/layout_margin_default"
+            android:layout_marginTop="@dimen/layout_margin_default"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_prod_description" />
+            app:layout_constraintTop_toBottomOf="@+id/detail_desc_text_input_layout">
+
+            <EditText
+                android:id="@+id/detail_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="@string/price"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/qis_decrease_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="@dimen/button_width_height"
+            android:layout_height="@dimen/button_width_height"
+            android:layout_marginLeft="@dimen/layout_margin_default"
+            android:layout_marginStart="@dimen/layout_margin_default"
+            android:layout_marginTop="@dimen/layout_margin_vertical"
             android:text="@string/quantity_decrease"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/detail_quant_in_stock"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintBottom_toBottomOf="@+id/detail_quant_in_stock_text_input_layout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_price" />
+            app:layout_constraintTop_toBottomOf="@+id/detail_price_text_input_layout" />
 
-        <EditText
-            android:id="@+id/detail_quant_in_stock"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/detail_quant_in_stock_text_input_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="@string/quantity_in_stock"
-            android:inputType="number"
-            app:layout_constraintEnd_toStartOf="@+id/qis_increase_button"
+            android:layout_marginTop="@dimen/layout_margin_vertical"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/qis_decrease_button"
-            app:layout_constraintTop_toBottomOf="@+id/detail_price" />
+            app:layout_constraintTop_toBottomOf="@+id/detail_price_text_input_layout">
+
+            <EditText
+                android:id="@+id/detail_quant_in_stock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_vertical"
+                android:ems="8"
+                android:focusable="false"
+                android:gravity="center"
+                android:hint="@string/quantity_in_stock"
+                android:inputType="number" />
+
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/qis_increase_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="@dimen/button_width_height"
+            android:layout_height="@dimen/button_width_height"
+            android:layout_marginTop="@dimen/layout_margin_vertical"
             android:text="@string/quantity_increase"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/detail_quant_in_stock"
-            app:layout_constraintTop_toBottomOf="@+id/detail_price" />
+            app:layout_constraintBottom_toBottomOf="@+id/detail_quant_in_stock_text_input_layout"
+            app:layout_constraintStart_toEndOf="@+id/detail_quant_in_stock_text_input_layout"
+            app:layout_constraintTop_toBottomOf="@+id/detail_price_text_input_layout"
+            />
 
         <Button
             android:id="@+id/qoo_decrease_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="@dimen/button_width_height"
+            android:layout_height="@dimen/button_width_height"
+            android:layout_marginLeft="@dimen/layout_margin_default"
+            android:layout_marginStart="@dimen/layout_margin_default"
+            android:layout_marginTop="@dimen/layout_margin_vertical"
             android:text="@string/quantity_decrease"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/detail_quant_on_order"
+            app:layout_constraintBottom_toBottomOf="@+id/detail_quant_on_order_text_input_layout"
+            app:layout_constraintEnd_toStartOf="@+id/detail_quant_on_order_text_input_layout"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock" />
+            app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock_text_input_layout" />
 
-        <EditText
-            android:id="@+id/detail_quant_on_order"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/detail_quant_on_order_text_input_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="@string/quantity_on_order"
-            android:inputType="number"
+            android:layout_marginTop="@dimen/layout_margin_vertical"
             app:layout_constraintEnd_toStartOf="@+id/qoo_increase_button"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/qoo_decrease_button"
-            app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock" />
+            app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock_text_input_layout">
+
+            <EditText
+                android:id="@+id/detail_quant_on_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_vertical"
+                android:ems="8"
+                android:focusable="false"
+                android:gravity="center"
+                android:hint="@string/quantity_on_order"
+                android:inputType="number"
+                app:layout_constraintEnd_toStartOf="@+id/qoo_increase_button"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/qoo_decrease_button"
+                app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock_text_input_layout" />
+
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/qoo_increase_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="@dimen/button_width_height"
+            android:layout_height="@dimen/button_width_height"
+            android:layout_marginTop="@dimen/layout_margin_vertical"
             android:text="@string/quantity_increase"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/detail_quant_on_order"
-            app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock" />
+            app:layout_constraintBottom_toBottomOf="@+id/detail_quant_on_order_text_input_layout"
+            app:layout_constraintStart_toEndOf="@+id/detail_quant_on_order_text_input_layout"
+            app:layout_constraintTop_toBottomOf="@+id/detail_quant_in_stock_text_input_layout" />
 
-        <EditText
-            android:id="@+id/detail_supplier_name"
-            android:layout_width="0dp"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/detail_supplier_name_text_input_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="@string/supplier_name"
-            android:inputType="textPersonName"
+            android:layout_marginEnd="@dimen/layout_margin_default"
+            android:layout_marginLeft="@dimen/layout_margin_default"
+            android:layout_marginRight="@dimen/layout_margin_default"
+            android:layout_marginStart="@dimen/layout_margin_default"
+            android:layout_marginTop="@dimen/layout_margin_vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_quant_on_order" />
+            app:layout_constraintTop_toBottomOf="@+id/detail_quant_on_order_text_input_layout">
 
-        <EditText
-            android:id="@+id/detail_supplier_phone"
-            android:layout_width="0dp"
+            <EditText
+                android:id="@+id/detail_supplier_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="@string/supplier_name"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/detail_supplier_phone_text_input_layout"
+            android:layout_width="@dimen/min_size"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="false"
-            android:layout_centerHorizontal="false"
-            android:layout_centerInParent="false"
-            android:layout_centerVertical="false"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="@string/supplier_phone"
-            android:inputType="phone"
+            android:layout_marginEnd="@dimen/layout_margin_default"
+            android:layout_marginLeft="@dimen/layout_margin_default"
+            android:layout_marginRight="@dimen/layout_margin_default"
+            android:layout_marginStart="@dimen/layout_margin_default"
+            android:layout_marginTop="@dimen/layout_margin_vertical"
             app:layout_constraintEnd_toStartOf="@+id/order_button"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_supplier_name" />
+            app:layout_constraintTop_toBottomOf="@id/detail_supplier_name_text_input_layout">
+
+            <EditText
+                android:id="@+id/detail_supplier_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="@string/supplier_phone"
+                android:inputType="phone" />
+
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/order_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="false"
-            android:layout_centerVertical="false"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/layout_margin_default"
+            android:layout_marginRight="@dimen/layout_margin_default"
             android:focusable="false"
-            android:minHeight="0dp"
             android:text="@string/order"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/detail_supplier_phone"
-            app:layout_constraintTop_toBottomOf="@+id/detail_supplier_name" />
-
+            app:layout_constraintBottom_toBottomOf="@+id/detail_supplier_phone_text_input_layout"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
             android:id="@+id/delete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="@dimen/layout_margin_default"
+            android:layout_marginTop="@dimen/layout_margin_vertical"
             android:focusable="false"
             android:text="@string/delete"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_supplier_phone"
+            app:layout_constraintTop_toBottomOf="@+id/detail_supplier_phone_text_input_layout"
             app:layout_constraintVertical_bias="0.905" />
 
     </android.support.constraint.ConstraintLayout>

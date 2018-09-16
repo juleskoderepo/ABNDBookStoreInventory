@@ -114,6 +114,26 @@ public class DetailActivity extends AppCompatActivity
         qooAddButton = findViewById(R.id.qoo_increase_button);
         qooSubtractButton = findViewById(R.id.qoo_decrease_button);
 
+        // Initialize price and quantity fields for new product
+        if (currentProductUri == null) {
+            priceET.setText("0");
+            quantityInStockET.setText("0");
+            quantityOnOrderET.setText("0");
+        }
+
+        // Configure visibility or enabled state of action buttons based
+        // existing or new product
+        if (currentProductUri != null) {
+            deleteButton.setVisibility(View.VISIBLE);
+        } else {
+            // Hide Delete button
+            deleteButton.setVisibility(View.GONE);
+            // Disable Order button
+            orderButton.setEnabled(false);
+        }
+
+
+
         // Listen for quantity in stock add button click
         qisAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,21 +184,6 @@ public class DetailActivity extends AppCompatActivity
             }
         });
 
-        // Initialize price and quantity fields for new product
-        if (currentProductUri == null) {
-            priceET.setText("0");
-            quantityInStockET.setText("0");
-            quantityOnOrderET.setText("0");
-        }
-
-        // Display the 'Delete' button only for an existing product
-        // Enable the 'Order' button for an existing product with supplier phone number
-        //  field populated.
-        if (currentProductUri != null) {
-            deleteButton.setVisibility(View.VISIBLE);
-        } else {
-            deleteButton.setVisibility(View.GONE);
-        }
         // Call the showDeleteConfirmationDialog method when the 'Delete' button is clicked
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,8 +192,6 @@ public class DetailActivity extends AppCompatActivity
             }
         });
 
-        // Disable 'Order' button by default
-        orderButton.setEnabled(false);
         // Call the phoneInOrder method when the 'Order' button is clicked
         orderButton.setOnClickListener(new View.OnClickListener() {
             @Override
