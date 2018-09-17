@@ -1,7 +1,6 @@
 package com.example.android.abndbookstoreinventory;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -16,7 +15,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -31,6 +29,7 @@ import android.widget.Toast;
 import com.example.android.abndbookstoreinventory.data.ProductContract.ProductEntry;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -49,12 +48,8 @@ public class DetailActivity extends AppCompatActivity
     private String quantOnOrderStr;
     private EditText supplierNameET;
     private EditText supplierPhoneET;
-    private Button deleteButton;
     private Button orderButton;
-    private Button qisAddButton;
-    private Button qisSubtractButton;
-    private Button qooAddButton;
-    private Button qooSubtractButton;
+
     // Declare and initialize variable for category
     private int category = ProductEntry.CATEGORY_UNKNOWN;
     // Variable to store the changed state of the product details
@@ -69,7 +64,6 @@ public class DetailActivity extends AppCompatActivity
         }
     };
 
-    private static final String LOG_TAG = DetailActivity.class.getSimpleName();
     private static final int DETAIL_LOADER_ID = 901;
 
     @Override
@@ -107,18 +101,18 @@ public class DetailActivity extends AppCompatActivity
         quantityOnOrderET = findViewById(R.id.detail_quant_on_order);
         supplierNameET = findViewById((R.id.detail_supplier_name));
         supplierPhoneET = findViewById(R.id.detail_supplier_phone);
-        deleteButton = findViewById(R.id.delete_button);
+        Button deleteButton = findViewById(R.id.delete_button);
         orderButton = findViewById(R.id.order_button);
-        qisAddButton = findViewById(R.id.qis_increase_button);
-        qisSubtractButton = findViewById(R.id.qis_decrease_button);
-        qooAddButton = findViewById(R.id.qoo_increase_button);
-        qooSubtractButton = findViewById(R.id.qoo_decrease_button);
+        Button qisAddButton = findViewById(R.id.qis_increase_button);
+        Button qisSubtractButton = findViewById(R.id.qis_decrease_button);
+        Button qooAddButton = findViewById(R.id.qoo_increase_button);
+        Button qooSubtractButton = findViewById(R.id.qoo_decrease_button);
 
         // Initialize price and quantity fields for new product
         if (currentProductUri == null) {
-            priceET.setText("0");
-            quantityInStockET.setText("0");
-            quantityOnOrderET.setText("0");
+            priceET.setText(getString(R.string.price_default_value));
+            quantityInStockET.setText(getString(R.string.quantity_default_value));
+            quantityOnOrderET.setText(getString(R.string.quantity_default_value));
         }
 
         // Configure visibility or enabled state of action buttons based
@@ -131,7 +125,6 @@ public class DetailActivity extends AppCompatActivity
             // Disable Order button
             orderButton.setEnabled(false);
         }
-
 
 
         // Listen for quantity in stock add button click
@@ -277,9 +270,9 @@ public class DetailActivity extends AppCompatActivity
                     NavUtils.navigateUpFromSameTask(this);
                     return true;
                 }
-            // Otherwise if there are changes, set up a dialog to warn the user
-            // Create a click listener to handle the user confirming that changes
-            // should be discarded
+                // Otherwise if there are changes, set up a dialog to warn the user
+                // Create a click listener to handle the user confirming that changes
+                // should be discarded
                 DialogInterface.OnClickListener discardButtonClickListener =
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -365,7 +358,7 @@ public class DetailActivity extends AppCompatActivity
             // Extract price value from price column
             double priceDbl = cursor.getInt(priceColumnIndex);
             // Convert price value to decimal
-            priceDbl = priceDbl/100;
+            priceDbl = priceDbl / 100;
             // Create a formatter for currency based on the default locale
             NumberFormat currencyFormatter =
                     NumberFormat.getCurrencyInstance(Locale.getDefault());
@@ -414,12 +407,21 @@ public class DetailActivity extends AppCompatActivity
         int prodCategory = category;
         String prodDesc = productDescriptionET.getText().toString().trim();
         String priceStr = priceET.getText().toString().trim();
-        //convert priceStr value to integer to insert into table
-        //TODO: add logic to convert decimal values to integer
-        Integer prodPrice = 0;
+        // Convert price String value to integer for insertion into db table
+        // Remove '$' character from price String
+        priceStr = priceStr.replace("$", "");
+        // Since this is currency, use BigDecimal for conversion to integer
+        // Declare BigDecimal variable and initialize to 0.
+        BigDecimal prodPrice = BigDecimal.valueOf(0);
+        // Assign price String to BigDecimal var if value is not empty
         if (!priceStr.isEmpty()) {
-            prodPrice = Integer.parseInt(priceStr);
+            prodPrice = new BigDecimal(priceStr);
         }
+        // Round to 2 decimal places if more than 2 places
+        prodPrice = prodPrice.setScale(2, RoundingMode.HALF_UP);
+        // Multiply by 100 and convert to int
+        int priceInt = prodPrice.multiply(BigDecimal.valueOf(100)).intValueExact();
+
         quantInStockStr = quantityInStockET.getText().toString().trim();
         //convert Quantity In Stock String value to integer
         Integer prodQuantInStock = 0;
@@ -441,7 +443,7 @@ public class DetailActivity extends AppCompatActivity
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, prodName);
         values.put(ProductEntry.COLUMN_PRODUCT_CATEGORY, prodCategory);
         values.put(ProductEntry.COLUMN_PRODUCT_DESCRIPTION, prodDesc);
-        values.put(ProductEntry.COLUMN_PRICE, prodPrice);
+        values.put(ProductEntry.COLUMN_PRICE, priceInt);
         values.put(ProductEntry.COLUMN_QUANTITY_IN_STOCK, prodQuantInStock);
         values.put(ProductEntry.COLUMN_QUANTITY_ON_ORDER, prodQuantOnOrder);
         values.put(ProductEntry.COLUMN_SUPPLIER_NAME, supplierName);
@@ -499,7 +501,7 @@ public class DetailActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        // If the pet hasn't changed, continue with handling back button press
+        // If the product hasn't changed, continue with handling back button press
         if (!productHasChanged) {
             super.onBackPressed();
             return;
@@ -570,15 +572,8 @@ public class DetailActivity extends AppCompatActivity
     private void incrementQuantity(int buttonId) {
         switch (buttonId) {
             case R.id.qis_increase_button:
-                //quantInStockStr = quantityInStockET.getText().toString().trim();
-                Log.i(LOG_TAG + ".incrementQuantity()",
-                        "Quantity in stock string value is: " + quantInStockStr);
                 int quantityInStock = Integer.parseInt(quantInStockStr);
-                Log.i(LOG_TAG + ".incrementQuantity()",
-                        "Quantity in stock int value is: " + quantityInStock);
                 quantityInStock += 1;
-                Log.i(LOG_TAG + ".incrementQuantity()",
-                        "Quantity in stock incremented value is: " + quantityInStock);
                 quantityInStockET.setText(String.valueOf(quantityInStock));
                 break;
             case R.id.qoo_increase_button:
@@ -609,6 +604,10 @@ public class DetailActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Open phone app to call the supplier using the number stored in the db.
+     * Display toast message if phone number is empty and return user to activity.
+     */
     private void phoneInOrder() {
         if (supplierPhoneET.getText().toString().isEmpty()) {
             Toast.makeText(this, getString(R.string.order_phone_num_required_msg),

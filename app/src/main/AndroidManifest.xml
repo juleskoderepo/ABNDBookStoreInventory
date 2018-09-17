@@ -22,11 +22,12 @@
 
         <activity
             android:name=".DetailActivity"
+            android:parentActivityName=".InventoryActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".InventoryActivity">
+            android:windowSoftInputMode="stateUnchanged">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".InventoryActivity"/>
+                android:value=".InventoryActivity" />
         </activity>
 
         <provider

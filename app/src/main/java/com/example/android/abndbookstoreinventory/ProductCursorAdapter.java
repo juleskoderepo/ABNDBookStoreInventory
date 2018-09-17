@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.example.android.abndbookstoreinventory.data.ProductContract;
 
-import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -64,10 +63,10 @@ public class ProductCursorAdapter extends CursorAdapter {
         holder = new ProductViewHolder();
 
         // Find fields to populate in inflated template
-        holder.nameTV = (TextView) view.findViewById(R.id.product_name);
-        holder.priceTV = (TextView) view.findViewById(R.id.price);
-        holder.qisTV = (TextView) view.findViewById(R.id.quantity_in_stock);
-        holder.saleButton = (Button) view.findViewById(R.id.sale_button);
+        holder.nameTV = view.findViewById(R.id.product_name);
+        holder.priceTV = view.findViewById(R.id.price);
+        holder.qisTV = view.findViewById(R.id.quantity_in_stock);
+        holder.saleButton = view.findViewById(R.id.sale_button);
 
         // store the holder with the view
         view.setTag(holder);

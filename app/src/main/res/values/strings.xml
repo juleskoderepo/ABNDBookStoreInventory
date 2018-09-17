@@ -29,10 +29,13 @@
     <string name="delete">Delete</string>
 
     <string name="product_name">Name</string>
+    <string name="name_label">Name:</string>
     <string name="price">Price</string>
+    <string name="price_label">Price:</string>
     <string name="category">Category</string>
     <string name="product_descripton">Product Description</string>
     <string name="quantity_in_stock">Quantity In Stock</string>
+    <string name="quantity_in_stock_label">Quantity In Stock:</string>
     <string name="quantity_on_order">Quantity On Order</string>
     <string name="supplier_name">Supplier Name</string>
     <string name="supplier_phone">Supplier Phone Number</string>
@@ -42,6 +45,9 @@
     <string name="category_periodical">Periodical</string>
     <string name="category_e_device">Electronic Device</string>
     <string name="category_office_supply">Office Supply</string>
+
+    <string name="price_default_value">$0.00</string>
+    <string name="quantity_default_value">0</string>
 
     <string name="edit_delete_failed">Error deleting product.</string>
     <string name="edit_delete_successful">Product deleted.</string>

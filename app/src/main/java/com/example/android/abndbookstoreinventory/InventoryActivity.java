@@ -9,29 +9,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.LogPrinter;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.abndbookstoreinventory.data.ProductDbHelper;
 import com.example.android.abndbookstoreinventory.data.ProductContract.ProductEntry;
-
-import java.math.BigDecimal;
 
 public class InventoryActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -39,29 +32,25 @@ public class InventoryActivity extends AppCompatActivity
     private static final String LOG_TAG = InventoryActivity.class.getSimpleName();
     private static final int PROD_LOADER_ID = 900;
 
-    ProductDbHelper prodDbHelper;
     ProductCursorAdapter cursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent openDetail = new Intent(InventoryActivity.this,DetailActivity.class);
+                Intent openDetail = new Intent(InventoryActivity.this, DetailActivity.class);
                 startActivity(openDetail);
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
             }
         });
-
-        // Database helper to get access to the database
-        prodDbHelper = new ProductDbHelper(this);
 
         // Find ListView and populate
         ListView productListView = findViewById(R.id.list_product);
@@ -81,7 +70,7 @@ public class InventoryActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> adapterView, View view, int position,
                                     long id) {
 
-                Log.i(LOG_TAG,"List item clicked");
+                Log.i(LOG_TAG, "List item clicked");
                 // Create a new intent to launch the DetailActivity
                 Intent openDetail = new Intent(InventoryActivity.this,
                         DetailActivity.class);
@@ -89,7 +78,7 @@ public class InventoryActivity extends AppCompatActivity
                 // Append the "id" onto the {@link ProductEntry#CONTENT_URI}
                 Uri currentProductUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, id);
 
-                Log.i(LOG_TAG,"Uri passed in the intent is: " + currentProductUri);
+                Log.i(LOG_TAG, "Uri passed in the intent is: " + currentProductUri);
                 // Set the URI on the data field of the intent
                 openDetail.setData(currentProductUri);
                 // Launch the {@link DetailActivity} to display the detail for the current product
@@ -194,7 +183,7 @@ public class InventoryActivity extends AppCompatActivity
         cursorAdapter.swapCursor(null);
     }
 
-    private void showDeleteConfirmationDialog(){
+    private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and set click listeners
         // for the positive and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -210,7 +199,7 @@ public class InventoryActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // User clicked 'Cancel' so go back to activity
-                if(dialogInterface != null){
+                if (dialogInterface != null) {
                     dialogInterface.dismiss();
                 }
             }
@@ -225,10 +214,10 @@ public class InventoryActivity extends AppCompatActivity
     /**
      * Perform delete of all records from db table
      */
-    private void deleteInventory(){
+    private void deleteInventory() {
         int rowsDeleted = getContentResolver().delete(ProductEntry.CONTENT_URI,
-                String.valueOf(1),null);
-        Toast.makeText(this,getString(R.string.rows_deleted) + rowsDeleted,
+                String.valueOf(1), null);
+        Toast.makeText(this, getString(R.string.rows_deleted) + rowsDeleted,
                 Toast.LENGTH_LONG).show();
 
     }

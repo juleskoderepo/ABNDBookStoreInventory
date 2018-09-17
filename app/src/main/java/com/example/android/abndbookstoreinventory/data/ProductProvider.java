@@ -41,7 +41,7 @@ public class ProductProvider extends ContentProvider {
     static {
         // URI for all products
         productUriMatcher.addURI(ProductContract.CONTENT_AUTHORITY,
-                ProductContract.PATH_PRODUCTS,PRODUCTS);
+                ProductContract.PATH_PRODUCTS, PRODUCTS);
         // URI for a single product
         productUriMatcher.addURI(ProductContract.CONTENT_AUTHORITY,
                 ProductContract.PATH_PRODUCTS + "/#", PRODUCT_ID);
@@ -57,11 +57,11 @@ public class ProductProvider extends ContentProvider {
     /**
      * Query the db table if the URI is valid.
      *
-     * @param uri URI used to perform query
-     * @param projection Columns to be returned in query results
-     * @param selection Columns to be used in WHERE clause of query statement
+     * @param uri           URI used to perform query
+     * @param projection    Columns to be returned in query results
+     * @param selection     Columns to be used in WHERE clause of query statement
      * @param selectionArgs Values corresponding to the columns in the WHERE clause
-     * @param sortOrder The way results are to be sorted when returned
+     * @param sortOrder     The way results are to be sorted when returned
      * @return Cursor containing db query results
      */
     @Nullable
@@ -78,10 +78,10 @@ public class ProductProvider extends ContentProvider {
         // determine if URI is valid and then follow the correct path to perform the query
         int match = productUriMatcher.match(uri);
 
-        switch(match){
+        switch (match) {
             case PRODUCTS:
                 cursor = db.query(ProductContract.ProductEntry.TABLE_NAME, projection,
-                        selection, selectionArgs,null, null, sortOrder);
+                        selection, selectionArgs, null, null, sortOrder);
                 break;
             case PRODUCT_ID:
                 // extract out the product ID from the URI
@@ -99,7 +99,7 @@ public class ProductProvider extends ContentProvider {
         // Set notification URI on the cursor, so we know what content URI
         // the cursor was created for. If the data at this URI changes, then we need
         // to update the Cursor.
-        cursor.setNotificationUri(getContext().getContentResolver(),uri);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         // Return the cursor
         return cursor;
@@ -107,6 +107,7 @@ public class ProductProvider extends ContentProvider {
 
     /**
      * Returns the MIME type of data at the content URI
+     *
      * @param uri uri value passed to the content provider
      * @return MIME type of the data for either a single record or multiple items
      */
@@ -114,7 +115,7 @@ public class ProductProvider extends ContentProvider {
     @Override
     public String getType(@NonNull Uri uri) {
         final int match = productUriMatcher.match(uri);
-        switch(match){
+        switch (match) {
             case PRODUCTS:
                 return ProductContract.ProductEntry.CONTENT_LIST_TYPE;
             case PRODUCT_ID:
@@ -129,7 +130,7 @@ public class ProductProvider extends ContentProvider {
      * if the URI is valid.
      * This method calls a helper method to perform the actual insert
      *
-     * @param uri content URI used to perform the db insert
+     * @param uri           content URI used to perform the db insert
      * @param contentValues values to insert into the db
      * @return new URI appended with ID assigned to the inserted row
      */
@@ -137,7 +138,7 @@ public class ProductProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
         final int match = productUriMatcher.match(uri);
-        switch(match){
+        switch (match) {
             case PRODUCTS:
                 return insertProduct(uri, contentValues);
             default:
@@ -147,40 +148,41 @@ public class ProductProvider extends ContentProvider {
 
     /**
      * Helper method to perform db insert.
-     * @param uri content URI used to perform the db insert
+     *
+     * @param uri           content URI used to perform the db insert
      * @param contentValues values to insert into the db
      * @return new URI appended with ID assigned to the inserted row
      */
-    private Uri insertProduct(Uri uri, ContentValues contentValues){
-        if(!validateData(contentValues)){
+    private Uri insertProduct(Uri uri, ContentValues contentValues) {
+        if (!validateData(contentValues)) {
             return null;
-        };
+        }
 
         // get a writable db instance
         SQLiteDatabase db = prodDbHelper.getWritableDatabase();
 
         // Insert new row. Returns row ID of the new row inserted or -1 if unsuccessful
-        long newRowId = db.insert(ProductContract.ProductEntry.TABLE_NAME,null,
+        long newRowId = db.insert(ProductContract.ProductEntry.TABLE_NAME, null,
                 contentValues);
 
         // Log error if newRowId = -1 meaning insert failed
-        if (newRowId == -1){
-            Log.e(LOG_TAG,"Failed to insert row for URI: " + uri);
+        if (newRowId == -1) {
+            Log.e(LOG_TAG, "Failed to insert row for URI: " + uri);
         }
 
         // Notify listeners that the data has changed for the product content URI
-        getContext().getContentResolver().notifyChange(uri,null);
+        getContext().getContentResolver().notifyChange(uri, null);
 
         // return the new URI with the ID assigned to the new row
-        return ContentUris.withAppendedId(uri,newRowId);
+        return ContentUris.withAppendedId(uri, newRowId);
     }
 
     /**
      * Delete row or rows given the selection and selectionArgs passed in
      * if the URI is valid.
      *
-     * @param uri Content URI used to perform the delete
-     * @param selection Column to be used in the WHERE clause of the delete statement
+     * @param uri           Content URI used to perform the delete
+     * @param selection     Column to be used in the WHERE clause of the delete statement
      * @param selectionArgs Value corresponding to the column in the WHERE clause
      * @return The number of rows deleted.
      */
@@ -193,7 +195,7 @@ public class ProductProvider extends ContentProvider {
         int rowsDeleted;
 
         final int match = productUriMatcher.match(uri);
-        switch(match){
+        switch (match) {
             case PRODUCTS:
                 // Perform delete of all records
                 rowsDeleted = db.delete(ProductContract.ProductEntry.TABLE_NAME,
@@ -205,7 +207,7 @@ public class ProductProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 // Perform delete of specified product
                 rowsDeleted = db.delete(ProductContract.ProductEntry.TABLE_NAME,
-                        selection,selectionArgs);
+                        selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException(DELETE_EXCEPTION + uri);
@@ -213,7 +215,7 @@ public class ProductProvider extends ContentProvider {
 
         // Notify listeners that the data has changed for the product content URI
         // if a row is deleted
-        getContext().getContentResolver().notifyChange(uri,null);
+        getContext().getContentResolver().notifyChange(uri, null);
 
         return rowsDeleted;
     }
@@ -223,11 +225,11 @@ public class ProductProvider extends ContentProvider {
      * if the URI is valid.
      * This method calls a helper method to perform the actual update.
      *
-     * @param uri Content URI used to perform db update
+     * @param uri           Content URI used to perform db update
      * @param contentValues Key-value pairs of table columns and corresponding values to update.
-     * @param selection Columns to be used in the WHERE clause of the update statement.
-     *                  In this case, the ID column will be used to identify the specific row
-     *                  to be updated.
+     * @param selection     Columns to be used in the WHERE clause of the update statement.
+     *                      In this case, the ID column will be used to identify the specific row
+     *                      to be updated.
      * @param selectionArgs Values corresponding to the columns to be used in the WHERE clause.
      *                      In this case, the ID value will be parsed from URI passed in.
      * @return The number of rows updated.
@@ -237,14 +239,14 @@ public class ProductProvider extends ContentProvider {
                       @Nullable String selection, @Nullable String[] selectionArgs) {
 
         final int match = productUriMatcher.match(uri);
-        switch(match){
+        switch (match) {
             case PRODUCTS:
-                return updateProduct(uri,contentValues,selection,selectionArgs);
+                return updateProduct(uri, contentValues, selection, selectionArgs);
             case PRODUCT_ID:
                 selection = ProductContract.ProductEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
-                return updateProduct(uri,contentValues,selection,selectionArgs);
+                return updateProduct(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException(UPDATE_EXCEPTION + uri);
         }
@@ -253,24 +255,24 @@ public class ProductProvider extends ContentProvider {
     /**
      * Helper method to perform db update.
      *
-     * @param uri Content URI used to perform db update
+     * @param uri           Content URI used to perform db update
      * @param contentValues Key-value pairs of table columns and corresponding values to update.
-     * @param selection Columns to be used in the WHERE clause of the update statement.
-     *                  In this case, the ID column will be used to identify the specific row
-     *                  to be updated.
+     * @param selection     Columns to be used in the WHERE clause of the update statement.
+     *                      In this case, the ID column will be used to identify the specific row
+     *                      to be updated.
      * @param selectionArgs Values corresponding to the columns to be used in the WHERE clause.
      *                      In this case, the ID value will be parsed from URI passed in.
      * @return The number of rows updated.
      */
     private int updateProduct(Uri uri, ContentValues contentValues, String selection,
-                              String[] selectionArgs){
+                              String[] selectionArgs) {
 
         // Return 0 (rows updated) if there are no columns and corresponding values passed in
-        if(contentValues.size() == 0){
+        if (contentValues.size() == 0) {
             return 0;
         }
         // Validate all data fields when save initiated from detail screen
-        if(contentValues.size() > 1) {
+        if (contentValues.size() > 1) {
             // Return 0 (rows updated) if any invalid data is detected
             if (!validateData(contentValues)) {
                 return 0;
@@ -283,10 +285,10 @@ public class ProductProvider extends ContentProvider {
         int rowsUpdated = db.update(ProductContract.ProductEntry.TABLE_NAME, contentValues,
                 selection, selectionArgs);
 
-        if(rowsUpdated != 0){
+        if (rowsUpdated != 0) {
             // Notify listeners that the data has changed for the product content URI
             // if a row is updated
-            getContext().getContentResolver().notifyChange(uri,null);
+            getContext().getContentResolver().notifyChange(uri, null);
         }
 
         // Return number of rows updated
@@ -301,7 +303,7 @@ public class ProductProvider extends ContentProvider {
      * @param contentValues Key-value pairs of table columns and corresponding values to be validated
      * @return true, if all values are valid, or false, if any value is invalid
      */
-    private boolean validateData(ContentValues contentValues){
+    private boolean validateData(ContentValues contentValues) {
         boolean dataIsValid = false;
         // Validate that all values are not null or empty
         String name = contentValues.getAsString(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME);
@@ -319,50 +321,50 @@ public class ProductProvider extends ContentProvider {
         String supplierPhone = contentValues.getAsString(
                 ProductContract.ProductEntry.COLUMN_SUPPLIER_PHONE);
 
-        if(name == null || name.isEmpty()){
-            Toast.makeText(getContext(),"Please enter a name before saving.",
+        if (name == null || name.isEmpty()) {
+            Toast.makeText(getContext(), "Please enter a name before saving.",
                     Toast.LENGTH_SHORT).show();
             return dataIsValid;
         }
 
-        if(category == null || !ProductContract.ProductEntry.isValidCategory(category)) {
-            Log.i(LOG_TAG,"Category in contentValues is: " + category);
-            Toast.makeText(getContext(),"Please select a valid category",
+        if (category == null || !ProductContract.ProductEntry.isValidCategory(category)) {
+            Log.i(LOG_TAG, "Category in contentValues is: " + category);
+            Toast.makeText(getContext(), "Please select a valid category",
                     Toast.LENGTH_SHORT).show();
             return dataIsValid;
         }
 
-        if(description == null || description.isEmpty()){
+        if (description == null || description.isEmpty()) {
             Toast.makeText(getContext(), "Please enter a product description",
                     Toast.LENGTH_SHORT).show();
             return dataIsValid;
         }
 
-        if(price == null || price < 0){
+        if (price == null || price < 0) {
             Toast.makeText(getContext(), "Please enter a valid price",
                     Toast.LENGTH_SHORT).show();
             return dataIsValid;
         }
 
-        if(quantityInStock == null || quantityInStock < 0){
+        if (quantityInStock == null || quantityInStock < 0) {
             Toast.makeText(getContext(), "Please enter a valid quantity in stock",
                     Toast.LENGTH_SHORT).show();
             return dataIsValid;
         }
 
-        if(quantityOnOrder == null || quantityOnOrder < 0){
+        if (quantityOnOrder == null || quantityOnOrder < 0) {
             Toast.makeText(getContext(), "Please enter a valid quantity on order",
                     Toast.LENGTH_SHORT).show();
             return dataIsValid;
         }
 
-        if(supplierName == null || supplierName.isEmpty()){
+        if (supplierName == null || supplierName.isEmpty()) {
             Toast.makeText(getContext(), "Please enter supplier name",
                     Toast.LENGTH_SHORT).show();
             return dataIsValid;
         }
 
-        if(supplierPhone == null || supplierPhone.isEmpty()){
+        if (supplierPhone == null || supplierPhone.isEmpty()) {
             Toast.makeText(getContext(), "Please enter supplier phone number",
                     Toast.LENGTH_SHORT).show();
             return dataIsValid;
